@@ -4,6 +4,8 @@
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/covidsms)](https://CRAN.R-project.org/package=covidsms)
+[![Codecov test coverage](https://codecov.io/gh/jesse-smith/covidsms/branch/master/graph/badge.svg)](https://codecov.io/gh/jesse-smith/covidsms?branch=master)
+[![R-CMD-check](https://github.com/jesse-smith/covidsms/workflows/R-CMD-check/badge.svg)](https://github.com/jesse-smith/covidsms/actions)
 <!-- badges: end -->
 
 The covidsms package handles backend data processing and transfer for SCHD's
