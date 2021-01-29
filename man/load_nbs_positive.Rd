@@ -13,6 +13,9 @@ load_inv_positive(date = NULL)
 \arguments{
 \item{date}{Optional. Character (formatted as "YYYY-MM-DD") or \code{Date}.}
 }
+\value{
+A \code{tibble}
+}
 \description{
 \code{load_pcr_positive()} loads positive tests from the latest PCR snapshot file,
 or the one specified by \code{date}, if provided. \code{load_inv_positive()} does the

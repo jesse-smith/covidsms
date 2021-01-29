@@ -5,6 +5,7 @@
 #' otherwise be included in this package are loaded here.
 #'
 #' @importFrom coviData path_inv path_pcr read_file_delim std_dates std_names
+#'   assert_dataframe assert_cols assert_all path_create
 #'
 #' @name utils-coviData
 NULL

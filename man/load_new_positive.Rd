@@ -9,6 +9,9 @@ load_new_positive(date = NULL)
 \arguments{
 \item{date}{Optional. Character (formatted as "YYYY-MM-DD") or \code{Date}.}
 }
+\value{
+A \code{date_tbl}, which is a \code{tibble} with a \code{date} attribute
+}
 \description{
 \code{load_new_positive()} loads newly reported positive tests on a given date.
 It identifies newly reported tests on that date, subsets to those tests, and
