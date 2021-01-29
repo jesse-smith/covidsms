@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load New NBS Positive PCRs for a Given Date — load_new_positive • covidsms</title>
+<title>Load PCR Positives from a Given Date with Investigations File Data — load_positive • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Load New NBS Positive PCRs for a Given Date — load_new_positive" />
-<meta property="og:description" content="load_new_positive() loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records." />
+<meta property="og:title" content="Load PCR Positives from a Given Date with Investigations File Data — load_positive" />
+<meta property="og:description" content="load_positive() loads positive PCR tests and investigations, and it joins
+the results together." />
 
 
 
@@ -110,18 +109,17 @@ adds information from the investigations file to the identified records." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load New NBS Positive PCRs for a Given Date</h1>
+    <h1>Load PCR Positives from a Given Date with Investigations File Data</h1>
     <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/load_positive.R'><code>R/load_positive.R</code></a></small>
-    <div class="hidden name"><code>load_new_positive.Rd</code></div>
+    <div class="hidden name"><code>load_positive.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>load_new_positive()</code> loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records.</p>
+    <p><code>load_positive()</code> loads positive PCR tests and investigations, and it joins
+the results together.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_new_positive</span><span class='op'>(</span>date <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>load_positive</span><span class='op'>(</span>date <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load New NBS Positive PCRs for a Given Date — load_new_positive • covidsms</title>
+<title>Convert Data to ASCII Character Representation — as_chr_ascii • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Load New NBS Positive PCRs for a Given Date — load_new_positive" />
-<meta property="og:description" content="load_new_positive() loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records." />
+<meta property="og:title" content="Convert Data to ASCII Character Representation — as_chr_ascii" />
+<meta property="og:description" content="as_chr_ascii() converts atomic vectors and data frames to purely ASCII
+character representation." />
 
 
 
@@ -110,31 +109,51 @@ adds information from the investigations file to the identified records." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load New NBS Positive PCRs for a Given Date</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/load_positive.R'><code>R/load_positive.R</code></a></small>
-    <div class="hidden name"><code>load_new_positive.Rd</code></div>
+    <h1>Convert Data to ASCII Character Representation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/as_chr_ascii.R'><code>R/as_chr_ascii.R</code></a></small>
+    <div class="hidden name"><code>as_chr_ascii.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>load_new_positive()</code> loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records.</p>
+    <p><code>as_chr_ascii()</code> converts atomic vectors and data frames to purely ASCII
+character representation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_new_positive</span><span class='op'>(</span>date <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for logical</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for integer</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for double</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for factor</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for character</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+
+<span class='co'># S3 method for complex</span>
+<span class='fu'>as_chr_ascii</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>date</th>
-      <td><p>Optional. Character (formatted as "YYYY-MM-DD") or <code>Date</code>.</p></td>
+      <th>x</th>
+      <td><p>An object to convert</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>date_tbl</code>, which is a <code>tibble</code> with a <code>date</code> attribute</p>
+    <p><code>x</code> as an ASCII-encoded character vector</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

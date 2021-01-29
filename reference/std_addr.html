@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load New NBS Positive PCRs for a Given Date — load_new_positive • covidsms</title>
+<title>Standardize Addresses — std_addr • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,10 @@
 
 
 
-<meta property="og:title" content="Load New NBS Positive PCRs for a Given Date — load_new_positive" />
-<meta property="og:description" content="load_new_positive() loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records." />
+<meta property="og:title" content="Standardize Addresses — std_addr" />
+<meta property="og:description" content="std_addr() transliterates all characters to ASCII, replaces all symbols
+except dashes (-) and apostrophes (') with a space, removes apostrophes,
+removes extraneous whitespace, and converts to title case." />
 
 
 
@@ -110,31 +110,32 @@ adds information from the investigations file to the identified records." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load New NBS Positive PCRs for a Given Date</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/load_positive.R'><code>R/load_positive.R</code></a></small>
-    <div class="hidden name"><code>load_new_positive.Rd</code></div>
+    <h1>Standardize Addresses</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/std_addr.R'><code>R/std_addr.R</code></a></small>
+    <div class="hidden name"><code>std_addr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>load_new_positive()</code> loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records.</p>
+    <p><code>std_addr()</code> transliterates all characters to ASCII, replaces all symbols
+except dashes (<code><a href='https://rdrr.io/r/base/Arithmetic.html'>-</a></code>) and apostrophes (<code>'</code>) with a space, removes apostrophes,
+removes extraneous whitespace, and converts to title case.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_new_positive</span><span class='op'>(</span>date <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>std_addr</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>date</th>
-      <td><p>Optional. Character (formatted as "YYYY-MM-DD") or <code>Date</code>.</p></td>
+      <th>x</th>
+      <td><p>Character-like vector. This will be converted to character before
+standardizing.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>date_tbl</code>, which is a <code>tibble</code> with a <code>date</code> attribute</p>
+    <p>A character vector with standardized addresses</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load New NBS Positive PCRs for a Given Date — load_new_positive • covidsms</title>
+<title>Archive ACNS Upload — archive_positive • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Load New NBS Positive PCRs for a Given Date — load_new_positive" />
-<meta property="og:description" content="load_new_positive() loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records." />
+<meta property="og:title" content="Archive ACNS Upload — archive_positive" />
+<meta property="og:description" content="archive_positive() creates a backup of the ACNS data upload." />
 
 
 
@@ -110,31 +108,37 @@ adds information from the investigations file to the identified records." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load New NBS Positive PCRs for a Given Date</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/load_positive.R'><code>R/load_positive.R</code></a></small>
-    <div class="hidden name"><code>load_new_positive.Rd</code></div>
+    <h1>Archive ACNS Upload</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/archive_positive.R'><code>R/archive_positive.R</code></a></small>
+    <div class="hidden name"><code>archive_positive.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>load_new_positive()</code> loads newly reported positive tests on a given date.
-It identifies newly reported tests on that date, subsets to those tests, and
-adds information from the investigations file to the identified records.</p>
+    <p><code>archive_positive()</code> creates a backup of the ACNS data upload.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_new_positive</span><span class='op'>(</span>date <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>archive_positive</span><span class='op'>(</span><span class='va'>.data</span>, <span class='va'>dir</span>, date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>.data</span>, <span class='st'>"date"</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>.data</th>
+      <td><p>A data frame or data fram extension (e.g. a <code>tibble</code>)</p></td>
+    </tr>
+    <tr>
+      <th>dir</th>
+      <td><p>The archive directory</p></td>
+    </tr>
+    <tr>
       <th>date</th>
-      <td><p>Optional. Character (formatted as "YYYY-MM-DD") or <code>Date</code>.</p></td>
+      <td><p>The date to use as a timestamp</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>date_tbl</code>, which is a <code>tibble</code> with a <code>date</code> attribute</p>
+    <p><code>.data</code> (invisibly)</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
