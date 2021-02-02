@@ -8,7 +8,7 @@
 #' @return A `character` vector of standardized phone numbers
 #'
 #' @export
-std_phone <- function(x, region = "US") {
+std_phone <- function(x) {
 
   extraction_pattern <- "^([+]?0?1)?[0-9]{10}"
   removal_pattern <- "^([+]?0?1)(?=[0-9]{10})"

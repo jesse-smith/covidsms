@@ -4,11 +4,7 @@
 \alias{prep_positive}
 \title{Transform NBS Data to Format Necessary for Exporting to ACNS File}
 \usage{
-prep_positive(
-  .data = load_positive(),
-  date = attr(.data, "date"),
-  phone = c("cell", "home", "work")
-)
+prep_positive(.data = load_positive(), date = attr(.data, "date"))
 }
 \arguments{
 \item{.data}{Data from NBS snapshot file}

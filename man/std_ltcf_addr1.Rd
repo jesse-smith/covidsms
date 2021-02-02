@@ -4,7 +4,7 @@
 \alias{std_ltcf_addr1}
 \title{Remove ZIP, State, and City from Long-Term Care Facility Address Fields}
 \usage{
-std_ltcf_addr1(string, ltcf_cities = NULL)
+std_ltcf_addr1(string)
 }
 \arguments{
 \item{string}{Character. Input address vector.}

@@ -1,5 +1,6 @@
 filter_positive_duplicates <- function(.data, days = 180L) {
 
+  if (getRversion() >= "2.15.1") utils::globalVariables(".x")
   dates <- c("specimen_coll_dt", "inv_start_dt", "report_date")
 
   phone_cols <- c("patient_tel_cell", "patient_tel_home", "patient_phone_work")

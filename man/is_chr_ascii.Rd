@@ -15,7 +15,7 @@ is_chr_ascii(x, na_rm = FALSE)
 \arguments{
 \item{x}{An object to test}
 
-\item{na_rn}{Should missing values be removed for testing? If \code{FALSE}, any
+\item{na_rm}{Should missing values be removed for testing? If \code{FALSE}, any
 missing values will return \code{NA}}
 }
 \value{

@@ -5,7 +5,7 @@
 #'
 #' @param x An object to test
 #'
-#' @param na_rn Should missing values be removed for testing? If `FALSE`, any
+#' @param na_rm Should missing values be removed for testing? If `FALSE`, any
 #'   missing values will return `NA`
 #'
 #' @return `TRUE` if the object is ASCII character, `NA` if it includes missing

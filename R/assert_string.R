@@ -11,7 +11,7 @@ assert_string <- function(string, pattern, arg = NULL, na_rm = FALSE) {
   )
 
   if (na_rm) {
-    string_na <- na.omit(string)
+    string_na <- vctrs::vec_slice(string, i = !is.na(string))
   } else {
     string_na <- string
   }

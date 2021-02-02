@@ -40,7 +40,7 @@ std_state <- function(string) {
     stringr::str_squish() %>%
     dplyr::as_tibble() %>%
     dplyr::rename(fips = "value") %>%
-    dplyr::left_join(states, by = "fips") %>%
+    dplyr::left_join(covidsms::states, by = "fips") %>%
     dplyr::transmute(s = dplyr::coalesce(.data[["state"]], .data[["fips"]])) %>%
     dplyr::pull(1L) %>%
     stringr::str_squish() %>%

@@ -12,25 +12,14 @@
 #' @export
 prep_positive <- function(
   .data = load_positive(),
-  date = attr(.data, "date"),
-  phone = c("cell", "home", "work")
+  date = attr(.data, "date")
 ) {
 
-  rlang::arg_match(phone)
-
-  phone_cols <- phone %>%
-    stringr::str_replace(
-      pattern = "cell",
-      replacement = "patient_tel_cell"
-    ) %>%
-    stringr::str_replace(
-      pattern = "home",
-      replacement = "patient_tel_home"
-    ) %>%
-    stringr::str_replace(
-      pattern = "work",
-      replacement = "patient_phone_work"
-    )
+  phone_cols <- c(
+    "patient_tel_cell",
+    "patient_tel_home",
+    "patient_phone_work"
+  )
 
   .data %>%
     filter_by_residence() %>%

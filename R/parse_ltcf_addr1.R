@@ -18,6 +18,9 @@ parse_ltcf_addr1 <- function(.data, .col = "ADDR1") {
   col_nm <- coviData::select_colnames(.data, {{ .col }})
   coviData::assert_cols(.data, {{ col_nm }}, ptype = "character", n = 1L)
 
+  dir_dict <- postmastr::pm_dictionary(type = "directional")
+  suf_dict <- postmastr::pm_dictionary(type = "suffix")
+
   # Identify unique address strings to join back to `.data` later
   # Remove city, state, and ZIP with `std_ltcf_addr1()`
   data_id <- .data %>%
@@ -28,8 +31,8 @@ parse_ltcf_addr1 <- function(.data, .col = "ADDR1") {
   data_id %>%
     postmastr::pm_prep(.ltcf_addr1_tmp_, type = "street") %>%
     postmastr::pm_house_parse() %>%
-    postmastr::pm_streetDir_parse(dictionary = addr_dict_dir) %>%
-    postmastr::pm_streetSuf_parse(dictionary = addr_dict_suf) %>%
+    postmastr::pm_streetDir_parse(dictionary = dir_dict) %>%
+    postmastr::pm_streetSuf_parse(dictionary = suf_dict) %>%
     postmastr::pm_street_parse() %>%
     # Create new house + street variable from parsed address
     dplyr::transmute(
@@ -53,17 +56,14 @@ parse_ltcf_addr1 <- function(.data, .col = "ADDR1") {
 #' @return `string` with city, state, and ZIP removed
 #'
 #' @export
-std_ltcf_addr1 <- function(string, ltcf_cities = NULL) {
+std_ltcf_addr1 <- function(string) {
 
-  if (rlang::is_empty(ltcf_cities)) {
-    ltcf_cities <- fst::fst(ltcf_addr_path)[["pm.city"]] %>%
-      unique() %>%
-      sort()
-  }
+  ltcf_cities <- fst::fst(covidsms::ltcf_addr_path)[["pm.city"]] %>%
+    unique() %>%
+    sort() %>%
+    paste0(collapse = "|")
 
-  ltcf_cities_str <- paste0(ltcf_cities, collapse = "|")
-
-  ltcf_city_pattern <- stringr::str_glue("({ltcf_cities_str})$")
+  ltcf_cities_pattern <- stringr::str_glue("({ltcf_cities})$")
 
   string %>%
     stringr::str_squish() %>%
@@ -71,6 +71,6 @@ std_ltcf_addr1 <- function(string, ltcf_cities = NULL) {
     stringr::str_squish() %>%
     stringr::str_remove("(TN|TENN|TENNESSEE)$") %>%
     stringr::str_squish() %>%
-    stringr::str_remove(ltcf_city_pattern) %>%
+    stringr::str_remove(ltcf_cities_pattern) %>%
     stringr::str_squish()
 }

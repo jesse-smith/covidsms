@@ -1,3 +1,35 @@
+#' Download Current ACNS Data
+#'
+#' `download_acns()` downloads data from both the address and texting ACNS
+#' files and merges the two using common columns. It uses the address data as
+#' reference; any data in the SMS dataset not matching the address data is
+#' dropped. This is because address data is necessary for some downstream
+#' functions.
+#'
+#' @param addr_creds Character. A length 2 vector containing the credentials for
+#'   accessing the ACNS address data. The username should appear first, then the
+#'   password.
+#'
+#' @param sms_creds Character. A length 2 vector containing the credentials for
+#'   accessing the ACNS SMS data. The username should appear first, then the
+#'   password.
+#'
+#' @return A `tibble` containing the joined data
+#'
+#' @export
+download_acns <- function(
+  addr_creds = Sys.getenv(c("acns_usr", "acns_pwd")),
+  sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd"))
+) {
+
+  addr <- download_addr(usr = addr_creds[[1L]], pwd = addr_creds[[2L]])
+  sms  <- download_sms(usr = sms_creds[[1]], pwd = sms_creds[[2L]])
+
+  by_cols <- dplyr::intersect(colnames(addr), colnames(sms))
+
+  dplyr::left_join(addr, sms, by = by_cols)
+}
+
 acns_date <- function(.data) {
 
   if (!"DATE_ADDED" %in% colnames(.data)) {
@@ -66,16 +98,6 @@ download_sftp <- function(
   )
 
   invisible(path_create(dir_local, file))
-}
-
-download_acns <- function() {
-
-  addr <- download_addr()
-  sms  <- download_sms()
-
-  by_cols <- dplyr::intersect(colnames(addr), colnames(sms))
-
-  dplyr::left_join(addr, sms, by = by_cols)
 }
 
 download_sms <- function(

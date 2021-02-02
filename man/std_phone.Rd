@@ -4,7 +4,7 @@
 \alias{std_phone}
 \title{Standardize Phone Numbers}
 \usage{
-std_phone(x, region = "US")
+std_phone(x)
 }
 \arguments{
 \item{x}{A vector convertible to \code{character} format containing phone numbers}

@@ -4,7 +4,7 @@ filter_by_lab <- function(.data) {
 
   if (".lab_tmp_" %in% colnames(.data)) {
     .data %>%
-      dplyr::filter(!.lab_tmp_ %in% labs) %>%
+      dplyr::filter(!.data[[".lab_tmp_"]] %in% labs) %>%
       dplyr::select(-".lab_tmp_")
   } else {
     .data %>%

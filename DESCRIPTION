@@ -16,15 +16,29 @@ Imports:
     dplyr,
     janitor,
     lubridate,
-    rlang,
-    stringr
+    rlang (>= 0.1.2),
+    stringr,
+    magrittr,
+    fs,
+    fst,
+    openxlsx,
+    postmastr,
+    purrr,
+    stringi,
+    tibble,
+    tidyr,
+    vctrs,
+    vroom,
+    covidModel (>= 0.0.0.9000)
 Suggests: 
     covr,
     dialr (>= 0.3.2.9000),
-    testthat (>= 3.0.0)
-Remotes: 
+    testthat (>= 3.0.0),
+    roxygen2
+Remotes:  
     jesse-smith/coviData,
-    socialresearchcentre/dialr
+    socialresearchcentre/dialr,
+    jesse-smith/covidModel
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
