@@ -14,54 +14,217 @@
 #' @param .data Data frame or data frame extension containing ACNS data. If none
 #'   is supplied, the latest data will be downloaded.
 #'
+#' @param incl_positive Should the output include new positives from NBS?
+#'
+#' @param filter_acns Should duplicated data from the previous ACNS files be
+#'   filtered out?
+#'
+#' @param assign Is this data being used for assignment purposes (`TRUE`) or
+#'   sms notification (`FALSE`)? The default is `FALSE`.
+#'
 #' @param date The date that the data was reported. This is extracted from the
 #'   `date` attribute of a `date_tbl`.
 #'
 #' @return Prepared data in `tibble` format
 #'
 #' @export
-prep_acns <- function(.data = download_acns(), date = attr(.data, "date")) {
+prep_acns <- function(
+  .data = download_acns(),
+  incl_positive = TRUE,
+  filter_acns = TRUE,
+  assign = FALSE,
+  date = attr(.data, "date")
+) {
   .data %>%
     janitor::clean_names() %>%
-    dplyr::mutate(
-      school_age = acns_school_age(),
-      long_term_care = acns_long_term_care(),
-      duplicate = acns_duplicate()
+    std_acns() %>%
+    filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date) %>%
+    purrr::when(
+      incl_positive ~ bind_acns_positive(., date = date, assign = assign),
+      ~ .
     ) %>%
-    janitor::clean_names(case = "screaming_snake") %>%
+    distinct_acns() %>%
+    add_acns_school_age() %>%
+    add_acns_long_term_care() %>%
+    add_acns_duplicate(date = date, assign = assign) %>%
+    std_acns_phone() %>%
+    remove_temp() %>%
     as_date_tbl(date = date)
 }
 
-acns_school_age <- function(data = dplyr::cur_data_all(), cutoff = "09/30") {
+#' Bind Positive NBS Data to ACNS
+#'
+#' `bind_acns_positive()` binds new data from `prep_positive()` to the input
+#' ACNS data.
+#'
+#' @param .acns ACNS data
+#'
+#' @param assign Is this call for case assignment purposes (`TRUE`) or
+#'   SMS purposes (`FALSE`)? Default is `FALSE`.
+#'
+#' @param date The `date` attribute for the `date_tbl` output
+bind_acns_positive <- function(
+  .acns,
+  assign = FALSE,
+  date = attr(.acns, "date")
+) {
+
+  date_pos <- if (assign) date else date - lubridate::days(1L)
+
+  dplyr::bind_rows(
+    load_positive(date_pos) %>% prep_positive(filter_new = TRUE),
+    janitor::clean_names(.acns)
+  ) %>%
+    as_date_tbl(date = date)
+}
+
+distinct_acns <- function(.data) {
+  .data %>%
+    dplyr::mutate(
+      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber",  "zip"))
+    ) %>%
+    coviData::coalesce_dupes(
+      .data[["first_name"]],
+      .data[["last_name"]],
+      .data[["date_of_birth"]],
+      .data[[".phone_zip_tmp_"]]
+    )
+}
+
+std_acns <- function(.data) {
+
+  addr_cols <- c("pkey", "addr1", "addr2", "city", "state", "zip")
+  cols_to_add <- addr_cols[!addr_cols %in% tolower(colnames(.data))]
+
+  na_col_chr <- rep(NA_character_, times = NROW(.data))
+
+  cols_loc <- c(
+    "date_added", "pkey", "result", "test_date", "first_name", "last_name",
+    "date_of_birth", "sex", "pnumber", "addr1", "addr2", "city", "state", "zip"
+  )
+
+  .data %>%
+    purrr::when(
+      length(cols_to_add) == 0L ~ .,
+      ~ dplyr::bind_cols(
+        .,
+        purrr::map_dfc(cols_to_add, ~ tibble::as_tibble_col(na_col_chr, .x))
+      )
+    ) %>%
+    dplyr::relocate({{ cols_loc }}) %>%
+    dplyr::mutate(
+      date_added = std_dates(.data[["date_added"]]) %>% lubridate::as_date(),
+      pkey = as.character(.data[["pkey"]]),
+      result = std_names(.data[["result"]]),
+      test_date = std_dates(.data[["test_date"]]) %>% lubridate::as_date(),
+      first_name = std_names(.data[["first_name"]]),
+      last_name = std_names(.data[["last_name"]]),
+      date_of_birth = std_dates(.data[["date_of_birth"]]) %>%
+        lubridate::as_date(),
+      sex = std_names(.data[["sex"]]),
+      pnumber = std_phone(.data[["pnumber"]]),
+      addr1 = std_addr(.data[["addr1"]]),
+      addr2 = std_addr(.data[["addr2"]]),
+      city = std_city(.data[["city"]]),
+      state = std_state(.data[["state"]]),
+      zip = std_zip(.data[["zip"]])
+    )
+}
+
+add_acns_school_age <- function(.data) {
+  dplyr::mutate(
+    .data,
+    .current_date_tmp_ = dplyr::coalesce(
+      .data[["test_date"]],
+      .data[["date_added"]]
+    ),
+    school_age = acns_school_age(
+      birth_date = .data[["date_of_birth"]],
+      current_date = .data[[".current_date_tmp_"]]
+    )
+  )
+}
+
+add_acns_long_term_care <- function(.data) {
+  dplyr::mutate(
+    .data,
+    long_term_care = acns_long_term_care(
+      pnumber = .data[["pnumber"]],
+      addr1 = .data[["addr1"]],
+      zip = .data[["zip"]]
+    )
+  )
+}
+
+add_acns_duplicate <- function(
+  .data,
+  date = attr(.data, "date"),
+  max_dist = 180L,
+  assign = FALSE
+) {
+
+  date_pos <- if (assign) date else date - lubridate::days(1L)
+
+  all_positive <- load_positive(date_pos) %>%
+    prep_positive(filter_lab = FALSE) %>%
+    # Remove new NBS from reference data
+    dplyr::anti_join(
+      dplyr::filter(.data, is_nbs(.data[["pkey"]])),
+      by = c("first_name", "last_name", "date_of_birth", "test_date")
+    ) %>%
+    # Combine phone and ZIP code for matching
+    dplyr::mutate(
+      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber", "zip"))
+    )
+
+  .data %>%
+    # Combine phone and ZIP code for matching
+    dplyr::mutate(
+      .row_id_tmp_ = dplyr::row_number(),
+      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber", "zip"))
+    ) %>%
+    # Get records in data with a match in the reference
+    dplyr::left_join(
+      all_positive,
+      by = c("first_name", "last_name", "date_of_birth", ".phone_zip_tmp_"),
+      suffix = c("", "_ref_")
+    ) %>%
+    dplyr::mutate(
+      .dupe_tmp_ = (.data[["test_date"]] - .data[["test_date_ref_"]]) %>%
+        as.integer() %>%
+        is_weakly_less_than(max_dist) %>%
+        tidyr::replace_na(FALSE)
+    ) %>%
+    dplyr::group_by(.data[[".row_id_tmp_"]]) %>%
+    dplyr::mutate(duplicate = any(.data[[".dupe_tmp_"]])) %>%
+    dplyr::ungroup() %>%
+    dplyr::distinct(.data[[".row_id_tmp_"]], .keep_all = TRUE) %>%
+    dplyr::select(-dplyr::ends_with("_ref_")) %>%
+    as_date_tbl(date = date)
+}
+
+is_nbs <- function(pkey) {
+  stringr::str_starts(pkey, "NBS") %>%
+    tidyr::replace_na(FALSE)
+}
+
+acns_school_age <- function(birth_date, current_date, cutoff = "09/30") {
 
   # Set minimum bound on legal birth dates
   min_date <- lubridate::as_date("1900-01-01")
+  # Get invalid `birth_date`
+  not_valid <- !((min_date <= birth_date) & (birth_date <= current_date))
 
-  # Get data
-  data <- rlang::eval_tidy(data, env = rlang::env_parent()) %>%
-    dplyr::transmute(
-      birth_date = std_dates(.data[["date_of_birth"]]) %>% lubridate::as_date(),
-      current_date = dplyr::coalesce(
-        std_dates(.data[["test_date"]]) %>% lubridate::as_date(),
-        std_dates(.data[["date_added"]]) %>% lubridate::as_date(),
-        lubridate::today()
-      )
-    ) %>%
-    # Convert invalid birth dates to missing
-    dplyr::mutate(
-      bdate_test = ({{ min_date }} <= .data[["birth_date"]]) &
-        (.data[["birth_date"]] <= .data[["current_date"]]),
-      birth_date = dplyr::if_else(
-        .data[["bdate_test"]],
-        .data[["birth_date"]],
-        lubridate::as_date(NA)
-      ),
-      school_date = acns_school_date(.data[["current_date"]], {{ cutoff }})
-    ) %>%
-    dplyr::select("birth_date", "school_date")
+  # Define `NA_Date_`
+  NA_Date_ <- lubridate::NA_Date_
 
-  # Determine whether is between 5-18 on defined cutoff date
-  lubridate::interval(data[["birth_date"]], data[["school_date"]]) %>%
+  # Create `birth_date` with invalid dates replaced with `NA_Date_`
+  bdate_valid <- vctrs::vec_assign(birth_date, i = not_valid, value = NA_Date_)
+
+  # Get school starting dates
+  school_date <- acns_school_date(current_date, cutoff = cutoff)
+
+  lubridate::interval(bdate_valid, school_date) %>%
     lubridate::as.period(unit = "year") %>%
     lubridate::year() %>%
     as.integer() %>%
@@ -88,130 +251,32 @@ acns_school_date <- function(date, cutoff = "09/30") {
   )
 }
 
-acns_long_term_care <- function(data = dplyr::cur_data_all()) {
+acns_long_term_care <- function(pnumber, addr1, zip) {
 
-  # Get data
-  data <- rlang::eval_tidy(data, env = rlang::env_parent()) %>%
-    dplyr::transmute(
-      pnumber = std_phone(.data[["pnumber"]]),
-      addr1   = std_ltcf_addr1(.data[["addr1"]]) %>%
-        paste(std_zip(.data[["zip"]])) %>%
-        std_addr()
-    )
+  addr <- paste(std_ltcf_addr1(addr1), zip)
 
   # Reference addresses - {house number} {street} {zip}
   address <- fst::fst(covidsms::ltcf_addr_path) %>%
     extract(c("pm.house", "pm.street", "pm.zip")) %>%
-    dplyr::transmute(
-      addr1 = paste(
-        .data[["pm.house"]],
-        .data[["pm.street"]],
-        .data[["pm.zip"]]
-      ) %>% std_addr()
-    ) %>%
+    tidyr::unite("addr", c("pm.house", "pm.street", "pm.zip"), sep = " ") %>%
     dplyr::pull(1L)
 
   # Reference phone number
   phone <- fst::fst(covidsms::ltcf_phone_path)[[1L]] %>% std_phone()
 
   # Check whether phone matches long-term care facility
-  phone_is_ltcf <- data[["pnumber"]] %in% phone
+  phone_is_ltcf <- pnumber %in% phone
 
   # Check whether address matches long-term care facility
-  addr1_is_ltcf <- data[["addr1"]] %in% address
+  addr1_is_ltcf <- addr %in% address
 
   # Return whether match was found
   as.logical(phone_is_ltcf + addr1_is_ltcf) %>% tidyr::replace_na(FALSE)
 }
 
-acns_duplicate <- function(data = dplyr::cur_data_all()) {
-
-  input_data <- rlang::eval_tidy(data, env = rlang::env_parent()) %>%
-    janitor::clean_names()
-
-  # Load NBS data
-  rlang::inform("Loading and parsing reference data...")
-  data <- prep_positive() %>%
-    janitor::clean_names() %>%
-    dplyr::mutate(
-      dplyr::across(
-        dplyr::contains("date"),
-        ~ std_dates(.x) %>% lubridate::as_date()
-      )
-    ) %T>%
-    {rlang::inform("Binding with input data...")} %>%
-    dplyr::bind_rows(input_data, .id = "id") %>%
-    # Create and standardize variables
-    dplyr::transmute(
-      .data[["id"]],
-      row_id = dplyr::row_number(),
-      first_name = std_names(.data[["first_name"]]),
-      last_name = std_names(.data[["last_name"]]),
-      birth_date = std_dates(.data[["date_of_birth"]]) %>% lubridate::as_date(),
-      test_date = dplyr::coalesce(
-        std_dates(.data[["test_date"]]) %>% lubridate::as_date(),
-        std_dates(.data[["date_added"]]) %>% lubridate::as_date(),
-        lubridate::today()
-      ),
-      pnumber = std_phone(.data[["pnumber"]]),
-      zip = std_zip(.data[["zip"]]),
-      phone_zip = dplyr::coalesce(.data[["pnumber"]], .data[["zip"]])
-    )  %>%
-    dplyr::select(-c("pnumber", "zip")) %T>%
-    # Group
-    {rlang::inform("Grouping observations...")} %>%
-    dplyr::group_by(
-      .data[["first_name"]],
-      .data[["last_name"]],
-      .data[["birth_date"]],
-      .data[["phone_zip"]]
-    ) %>%
-    # Remove groups with no entries from input
-    dplyr::filter(any(.data[["id"]] == 2L)) %>%
-    # Arrange by group and test date
-    dplyr::arrange(.data[["test_date"]], .by_group = TRUE) %>%
-    # Get group size
-    dplyr::mutate(n_grp = dplyr::n())
-
-  rlang::inform("Searching for duplicates...")
-  dupe2 <- data %>%
-    dplyr::ungroup() %>%
-    dplyr::filter(.data[["n_grp"]] == 2L) %>%
-    purrr::when(
-      vctrs::vec_size(.) == 0L ~ .,
-      ~ dplyr::mutate(., dupe = dist_dupe2(.data[["test_date"]], dist = 180L))
-    )
-
-  dupe_n <- data %>%
-    dplyr::filter(.data[["n_grp"]] > 2L) %>%
-    purrr::when(
-      vctrs::vec_size(.) == 0L ~ .,
-      ~ dplyr::mutate(., dupe = dist_dupe(.data[["test_date"]], dist = 180L))
-    ) %>%
-    dplyr::ungroup()
-
-  data %>%
-    dplyr::ungroup() %>%
-    dplyr::filter(.data[["n_grp"]] <= 1L) %>%
-    dplyr::mutate(dupe = FALSE) %>%
-    dplyr::bind_rows(dupe2, dupe_n) %>%
-    dplyr::filter(.data[["id"]] == 2L) %>%
-    dplyr::arrange(.data[["row_id"]]) %>%
-    dplyr::pull(.data[["dupe"]])
-}
-
-dist_dupe2 <- function(x, dist) {
-  x %>%
-    as.numeric() %>%
-    diff() %>%
-    append(NA) %>%
-    vctrs::vec_assign(i = seq.int(2L, vctrs::vec_size(x), 2L), value = NA) %>%
-    is_weakly_less_than(dist) %>%
-    vctrs::vec_fill_missing(direction = "down")
-}
-
-dist_dupe <- function(x, dist) {
-  purrr::accumulate(as.numeric(x), ~ (if ((.y - .x) > dist) .y else .x)) %>%
-    equals(dplyr::lag(.)) %>%
-    vctrs::vec_assign(1L, FALSE)
+std_acns_phone <- function(.data) {
+  dplyr::mutate(
+    .data,
+    pnumber = suppressMessages(std_phone(.data[["pnumber"]], dialr = TRUE))
+  )
 }

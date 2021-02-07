@@ -4,10 +4,13 @@
 \alias{std_phone}
 \title{Standardize Phone Numbers}
 \usage{
-std_phone(x)
+std_phone(x, dialr = FALSE)
 }
 \arguments{
 \item{x}{A vector convertible to \code{character} format containing phone numbers}
+
+\item{dialr}{Should the \code{dialr} package be used to check for valid number
+ranges? The default is \code{FALSE}.}
 }
 \value{
 A \code{character} vector of standardized phone numbers
@@ -15,4 +18,6 @@ A \code{character} vector of standardized phone numbers
 \description{
 \code{std_phone()} standardizes North American phone numbers to a 10-digit
 national format. Invalid or non-North American numbers are converted to \code{NA}.
+Note that \code{std_phone()} only check for truly valid number ranges when
+\code{dialr = TRUE}; otherwise, all 10-digit numbers are considered valid.
 }

@@ -1,3 +1,14 @@
+#' Deduplicate Investigations
+#'
+#' `distinct_investigations()` coalesces duplicate investigations down to a
+#'  single record.
+#'
+#' This function is memoised; it will cache return values and load them rather
+#' than re-processing the same input data.
+#'
+#' @param .data Input data from `translate_positive()`
+#'
+#' @return Deduplicated data
 distinct_investigation <- function(.data) {
 
   labs <- c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT")
@@ -5,8 +16,8 @@ distinct_investigation <- function(.data) {
   .data %>%
     dplyr::mutate(
       .row_id_tmp_ = dplyr::row_number(),
-      .rpt_dt_tmp_ = std_dates(.data[["DATE_ADDED"]]),
-      .test_dt_tmp_ = std_dates(.data[["TEST_DATE"]]),
+      .rpt_dt_tmp_ = std_dates(.data[["date_added"]]) %>% lubridate::as_date(),
+      .test_dt_tmp_ = std_dates(.data[["test_date"]]) %>% lubridate::as_date(),
       .lab_order_tmp_ = !.data[[".lab_tmp_"]] %in% labs
     ) %>%
     dplyr::arrange(

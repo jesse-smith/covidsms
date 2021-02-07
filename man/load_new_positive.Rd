@@ -7,7 +7,7 @@
 load_new_positive(date = NULL)
 }
 \arguments{
-\item{date}{Optional. Character (formatted as "YYYY-MM-DD") or \code{Date}.}
+\item{date}{Character (formatted as "YYYY-MM-DD") or \code{Date}.}
 }
 \value{
 A \code{date_tbl}, which is a \code{tibble} with a \code{date} attribute

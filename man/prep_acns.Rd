@@ -4,11 +4,25 @@
 \alias{prep_acns}
 \title{Prepare ACNS Data for Use in Case Assignment}
 \usage{
-prep_acns(.data = download_acns(), date = attr(.data, "date"))
+prep_acns(
+  .data = download_acns(),
+  incl_positive = TRUE,
+  filter_acns = TRUE,
+  assign = FALSE,
+  date = attr(.data, "date")
+)
 }
 \arguments{
 \item{.data}{Data frame or data frame extension containing ACNS data. If none
 is supplied, the latest data will be downloaded.}
+
+\item{incl_positive}{Should the output include new positives from NBS?}
+
+\item{filter_acns}{Should duplicated data from the previous ACNS files be
+filtered out?}
+
+\item{assign}{Is this data being used for assignment purposes (\code{TRUE}) or
+sms notification (\code{FALSE})? The default is \code{FALSE}.}
 
 \item{date}{The date that the data was reported. This is extracted from the
 \code{date} attribute of a \code{date_tbl}.}

@@ -4,12 +4,26 @@
 \alias{prep_positive}
 \title{Transform NBS Data to Format Necessary for Exporting to ACNS File}
 \usage{
-prep_positive(.data = load_positive(), date = attr(.data, "date"))
+prep_positive(
+  .data = load_positive(),
+  filter_lab = TRUE,
+  filter_new = FALSE,
+  filter_acns = filter_new,
+  date = attr(.data, "date")
+)
 }
 \arguments{
 \item{.data}{Data from NBS snapshot file}
 
-\item{date}{The date to use when creating the \code{DATE_ADDED} variable}
+\item{filter_lab}{Should records from labs reported through the ACNS process
+be filtered out?}
+
+\item{filter_new}{Should only new positives be returned? These are still
+de-duplicated across the full NBS dataset.}
+
+\item{filter_acns}{Should duplicates from previous ACNS files be removed?}
+
+\item{date}{The \code{date} attribute for the resulting \code{date_tbl}}
 }
 \value{
 A \code{date_tbl}, which is a \code{tibble} with a \code{date} attribute

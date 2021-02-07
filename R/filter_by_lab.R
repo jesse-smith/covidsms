@@ -1,28 +1,12 @@
-filter_by_lab <- function(.data) {
+filter_by_lab <- function(.data, filter = TRUE) {
+  if (filter) {
+    labs <- c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT")
 
-  labs <- c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT")
-
-  if (".lab_tmp_" %in% colnames(.data)) {
     .data %>%
       dplyr::filter(!.data[[".lab_tmp_"]] %in% labs) %>%
       dplyr::select(-".lab_tmp_")
   } else {
-    .data %>%
-      dplyr::mutate(
-        .lab_tmp_ = .data[["perform_facility_name"]] %>%
-          std_lab_names() %>%
-          std_labs_ael() %>%
-          std_labs_baptist() %>%
-          std_labs_poplar() %>%
-          std_labs_ut() %>%
-          std_labs_labcorp() %>%
-          std_labs_quest() %>%
-          std_labs_methodist() %>%
-          std_labs_mm() %>%
-          std_labs_mmg()
-      ) %>%
-      dplyr::filter(!.data[[".lab_tmp_"]] %in% labs) %>%
-      dplyr::select(-".lab_tmp_")
+    .data
   }
 }
 

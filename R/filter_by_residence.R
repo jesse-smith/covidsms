@@ -9,17 +9,12 @@
 #' @export
 filter_by_residence <- function(.data) {
 
-  NAs <- c("NA", "na", "Na", "nA", "N/A", "n/a", "N/a", "n/A")
+  juri_pattern <- "Memphis(/|[ ])Shelby County"
 
-  missings <- c(NA_character_, NAs, "", " ", ".")
-
-  .data %>%
     dplyr::filter(
-      stringr::str_detect(
-        .data[["jurisdiction_nm"]],
-        pattern = "Memphis(/|[ ])Shelby County"
-      ),
-      .data[["alt_county"]] %in% c("Shelby County", missings),
-      .data[["patient_state"]] %in% c("47", "TN", missings)
+      .data,
+      stringr::str_detect(.data[["jurisdiction_nm"]], pattern = juri_pattern),
+      .data[["alt_county"]] %in% c("Shelby County", NA_character_),
+      .data[["patient_state"]] %in% c("47", "TN", NA_character_)
     )
 }

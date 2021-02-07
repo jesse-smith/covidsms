@@ -5,11 +5,15 @@
 \title{Download Current ACNS Data}
 \usage{
 download_acns(
+  primary = c("sms", "addr"),
   addr_creds = Sys.getenv(c("acns_usr", "acns_pwd")),
   sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd"))
 )
 }
 \arguments{
+\item{primary}{Which data source should be used as the primary table? Choices
+are \code{"sms"} or \code{"addr"}; defaults to \code{"sms"}.}
+
 \item{addr_creds}{Character. A length 2 vector containing the credentials for
 accessing the ACNS address data. The username should appear first, then the
 password.}

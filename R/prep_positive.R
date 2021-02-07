@@ -5,129 +5,52 @@
 #'
 #' @param .data Data from NBS snapshot file
 #'
-#' @param date The date to use when creating the `DATE_ADDED` variable
+#' @param filter_lab Should records from labs reported through the ACNS process
+#'   be filtered out?
+#'
+#' @param filter_new Should only new positives be returned? These are still
+#'   de-duplicated across the full NBS dataset.
+#'
+#' @param filter_acns Should duplicates from previous ACNS files be removed?
+#'
+#' @param date The `date` attribute for the resulting `date_tbl`
 #'
 #' @return A `date_tbl`, which is a `tibble` with a `date` attribute
 #'
 #' @export
 prep_positive <- function(
   .data = load_positive(),
+  filter_lab = TRUE,
+  filter_new = FALSE,
+  filter_acns = filter_new,
   date = attr(.data, "date")
 ) {
-
-  phone_cols <- c(
-    "patient_tel_cell",
-    "patient_tel_home",
-    "patient_phone_work"
-  )
 
   .data %>%
     filter_by_residence() %>%
     filter_by_death() %>%
-    dplyr::transmute(
-      DATE_ADDED = dplyr::coalesce(
-        .data[["report_date"]],
-        vctrs::vec_rep(date, dplyr::n())
-      ) %>%
-        format("%Y-%m-%d"),
-      PKEY = pkey_nbs(.data[["lab_local_id"]]),
-      RESULT = "POSITIVE",
-      TEST_DATE = std_dates(.data[["spec_date_only"]]) %>%
-        as_single_digit_date(),
-      FIRST_NAME = .data[["patient_first_name"]] %>%
-        stringr::str_to_upper() %>%
-        stringr::str_squish(),
-      LAST_NAME = .data[["patient_last_name"]] %>%
-        stringr::str_to_upper() %>%
-        stringr::str_squish(),
-      DATE_OF_BIRTH = std_dates(.data[["patient_dob"]]) %>% format("%Y-%m-%d"),
-      SEX = .data[["patient_current_sex"]],
-      PNUMBER = dplyr::across({{ phone_cols}}, std_phone) %>%
-        dplyr::transmute(ph = coviData::coalesce_across({{ phone_cols }})) %>%
-        dplyr::pull("ph"),
-      ADDR1 = std_addr(.data[["patient_street_addr_1"]]),
-      ADDR2 = std_addr(.data[["patient_street_addr_2"]]),
-      CITY = std_city(.data[["patient_city"]]),
-      STATE = std_state(.data[["patient_state"]]),
-      ZIP = std_zip(.data[["patient_zip"]]),
-      .inv_id_tmp_ = .data[["inv_local_id"]],
-      .lab_tmp_ = .data[["perform_facility_name"]] %>%
-        std_lab_names() %>%
-        std_labs_ael() %>%
-        std_labs_baptist() %>%
-        std_labs_poplar() %>%
-        std_labs_ut() %>%
-        std_labs_labcorp() %>%
-        std_labs_quest() %>%
-        std_labs_methodist() %>%
-        std_labs_mm() %>%
-        std_labs_mmg()
-    ) %>%
+    translate_positive() %>%
     distinct_investigation() %>%
     distinct_test_date() %>%
-    filter_by_lab() %>%
+    filter_by_lab(filter = filter_lab) %>%
+    filter_by_new(filter = filter_new, date = date) %>%
+    filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date) %>%
     remove_temp() %>%
-    as_chr_ascii() %>%
-    as_date_tbl(date = date) %>%
-    validate_sms_data()
+    as_date_tbl(date = date)
 }
 
-#' Convert `Date` Objects to "M/D/YYYY" Format
+#' Create Primary Key from an NBS ID
 #'
-#' `as_single_digit_date()` converts `Date` vectors to "M/D/YYYY" `character`
-#' format, where month and day do not contain leading zeros (i.e. April 1, 2020
-#' would be 4/1/2020, not 04/01/2020).
+#' `pkey_nbs()` creates a primary key of the format "{NBS}-{ID_NUMBER}" from
+#' an 8-digit unique identifier in NBS. For labs, this is the `lab_local_id`;
+#' for investigations, this is `inv_local_id`; for people, this *should* be
+#' `patient_local_id`, though many people have multiple `patient_local_id`s.
 #'
-#' @param x A `Date` vector
+#' @param string A character vector of NBS IDs
 #'
-#' @return A `character` vector of formatted dates
-#'
-#' @export
-as_single_digit_date <- function(x) {
-  # Don't want to import globally, so assigning
-  year  <- function(x) lubridate::year(x)
-  month <- function(x) lubridate::month(x)
-  day   <- function(x) lubridate::day(x)
-
-  dplyr::if_else(
-    is.na(x),
-    NA_character_,
-    as.character(stringr::str_glue("{month(x)}/{day(x)}/{year(x)}"))
-  )
-}
-
+#' @return A character vector of primary keys
 pkey_nbs <- function(string) {
-
-  # Extract ID numbers from local id
-  id <- stringr::str_extract(string, "[0-9]{8}")
-
-  # Create unique prefix for any duplicates (up to n = 10)
-  dupes <- tibble::tibble(
-    i = vctrs::vec_seq_along(id),
-    d = vctrs::vec_duplicate_id(id)
-  ) %>%
-    dplyr::filter(.data[["i"]] != .data[["d"]]) %>%
-    dplyr::group_by(.data[["d"]]) %>%
-    dplyr::summarize(.data[["i"]], n = seq_len(dplyr::n())) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(n = as.character(.data[["n"]])) %>%
-    dplyr::select(-"d")
-
-  # Create unique IDs
-  vctrs::vec_assign(
-    vctrs::vec_rep("0", times = vctrs::vec_size(id)),
-    i = dupes[["i"]],
-    value = dupes[["n"]]
-  ) %>%
-    {paste0("NBS-", ., id)}
-}
-
-std_nbs_id <- function(string) {
   string %>%
     stringr::str_extract("[0-9]{8}") %>%
-    stringr::str_remove("^[0-9]0*")
-}
-
-remove_temp <- function(.data) {
-  dplyr::select(.data, -dplyr::matches(c("^[.].*_tmp_$", "^[.]tmp_$")))
+    {paste0("NBS-0", .)}
 }

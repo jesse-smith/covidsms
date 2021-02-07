@@ -49,7 +49,7 @@ load_positive <- function(date = NULL) {
 #' It identifies newly reported tests on that date, subsets to those tests, and
 #' adds information from the investigations file to the identified records.
 #'
-#' @param date Optional. Character (formatted as "YYYY-MM-DD") or `Date`.
+#' @param date Character (formatted as "YYYY-MM-DD") or `Date`.
 #'
 #' @return A `date_tbl`, which is a `tibble` with a `date` attribute
 #'
@@ -116,7 +116,7 @@ NULL
 load_pcr_positive <- function(date = NULL) {
 
   path_pcr(date = date) %>%
-    read_file_delim() %>%
+    read_pcr_positive() %>%
     janitor::clean_names() %>%
     dplyr::filter(
       .data[["inv_case_status"]] %in% c("C", "P"),
@@ -128,8 +128,9 @@ load_pcr_positive <- function(date = NULL) {
 #'
 #' @export
 load_inv_positive <- function(date = NULL) {
+
   path_inv(date = date) %>%
-    read_file_delim() %>%
+    read_inv_positive() %>%
     janitor::clean_names() %>%
     dplyr::filter(.data[["inv_case_status"]] %in% c("C", "P")) %>%
     dplyr::left_join(

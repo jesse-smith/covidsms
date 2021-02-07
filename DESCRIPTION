@@ -29,13 +29,14 @@ Imports:
     tidyr,
     vctrs,
     vroom,
-    covidModel (>= 0.0.0.9000)
+    covidModel
 Suggests: 
     covr,
-    dialr (>= 0.3.2.9000),
+    dialr,
     testthat (>= 3.0.0),
-    roxygen2
-Remotes:  
+    roxygen2,
+    memoise
+Remotes: 
     jesse-smith/coviData,
     socialresearchcentre/dialr,
     jesse-smith/covidModel

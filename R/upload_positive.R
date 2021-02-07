@@ -1,14 +1,28 @@
+#' Upload Positives in NBS to ACNS Data
+#'
+#' `upload_positive()` uploads data from `prep_positive()` to the ACNS SFTP
+#' site for inclusion in the following day's ACNS_DAILY_OUT file.
+#'
+#' @param .data A `tibble` from `prep_positive()`
+#'
+#' @param path The location to save the data on the SFTP server
+#'
+#' @param usr The username for the SFTP server
+#'
+#' @param pwd The password for the SFTP server
+#'
+#' @return `.data` (invisibly)
+#'
+#' @export
 upload_positive <- function(
-  .data,
-  path = "nbs_cumulative.xlsx",
+  .data = prep_positive(),
+  path  = "nbs_cumulative.xlsx",
   usr = Sys.getenv("acns_usr"),
   pwd = Sys.getenv("acns_pwd")
 ) {
 
   # Check that `.data` is a data frame
-  if (!is.data.frame(.data)) {
-    rlang::abort("`.data` must be a data frame or data frame extension")
-  }
+  coviData::assert_dataframe(.data)
 
   # Check that `.data` is formatted correctly
   validate_sms_data(.data)
@@ -34,14 +48,14 @@ upload_positive <- function(
   # Save `.data` as a temporary csv file
   tmp_dir <- fs::file_temp() %>% fs::dir_create()
   tmp <- path_create(tmp_dir, file_name)
-
   openxlsx::write.xlsx(.data, file = tmp)
-
-  # on.exit(fs::file_delete(tmp), add = TRUE)
+  on.exit(fs::file_delete(tmp), add = TRUE)
 
   coviData::sftp_upload(
     file = file_name,
     fromfolder = tmp_dir,
     sftp_connection = sftp_con
   )
+
+  .data
 }
