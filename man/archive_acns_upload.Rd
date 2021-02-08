@@ -6,7 +6,7 @@
 \usage{
 archive_acns_upload(
   .data,
-  dir = "V:/EPI DATA ANALYTICS TEAM/Mass Texting/Combined/",
+  dir = "V:/EPI DATA ANALYTICS TEAM/Mass Texting/ACNS_DAILY_OUT/Combined/",
   date = attr(.data, "date")
 )
 }
