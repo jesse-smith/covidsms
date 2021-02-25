@@ -19,6 +19,8 @@
 #' @param filter_acns Should duplicated data from the previous ACNS files be
 #'   filtered out?
 #'
+#' @param filter_lab Should labs in the current ACNS data be filtered from NBS?
+#'
 #' @param assign Is this data being used for assignment purposes (`TRUE`) or
 #'   sms notification (`FALSE`)? The default is `FALSE`.
 #'
@@ -32,15 +34,33 @@ prep_acns <- function(
   .data = download_acns(),
   incl_positive = TRUE,
   filter_acns = TRUE,
+  filter_lab = TRUE,
   assign = FALSE,
   date = attr(.data, "date")
 ) {
+
+  if (filter_lab) {
+    lab_date <- if (assign) date else date - lubridate::days(1L)
+    labs <- path_sms(date = lab_date) %>%
+      read_file_delim(col_select = "PKEY") %>%
+      acns_labs()
+  } else {
+    labs = character()
+  }
+
   .data %>%
     janitor::clean_names() %>%
     std_acns() %>%
     filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date) %>%
     purrr::when(
-      incl_positive ~ bind_acns_positive(., date = date, assign = assign),
+      incl_positive ~ bind_acns_positive(
+        .,
+        date = date,
+        assign = assign,
+        filter_acns = filter_acns,
+        filter_lab = filter_lab,
+        labs = labs
+      ),
       ~ .
     ) %>%
     distinct_acns() %>%
@@ -50,6 +70,22 @@ prep_acns <- function(
     std_acns_phone() %>%
     remove_temp() %>%
     as_date_tbl(date = date)
+}
+
+acns_labs <- function(.data) {
+  if (!"pkey" %in% colnames(.data)) return(character())
+
+  labs <- c("AEL", "BAPT", "CCHS", "POPH", "UT")
+
+  lab_pattern <- paste0("^(", paste0(labs, collapse = "|"), ")")
+
+  .data[["pkey"]] %>%
+    stringr::str_extract(lab_pattern) %>%
+    vctrs::vec_unique() %>%
+    na.omit() %>%
+    as.vector(mode = "character") %>%
+    stringr::str_replace("BAPT", replacement = "BAPTIST") %>%
+    stringr::str_replace("POPH", replacement = "POPLAR")
 }
 
 #' Bind Positive NBS Data to ACNS
@@ -63,16 +99,21 @@ prep_acns <- function(
 #'   SMS purposes (`FALSE`)? Default is `FALSE`.
 #'
 #' @param date The `date` attribute for the `date_tbl` output
+#'
+#' @param ... Additional arguments to pass to
+#'   \code{\link[covidsms:prep_positive]{prep_positive()}}; at time of creation,
+#'   these include `filter_lab` and `filter_acns`
 bind_acns_positive <- function(
   .acns,
   assign = FALSE,
-  date = attr(.acns, "date")
+  date = attr(.acns, "date"),
+  ...
 ) {
 
   date_pos <- if (assign) date else date - lubridate::days(1L)
 
   dplyr::bind_rows(
-    load_positive(date_pos) %>% prep_positive(filter_new = TRUE),
+    load_positive(date_pos) %>% prep_positive(filter_new = TRUE, ...),
     janitor::clean_names(.acns)
   ) %>%
     as_date_tbl(date = date)
@@ -113,14 +154,16 @@ std_acns <- function(.data) {
     ) %>%
     dplyr::relocate({{ cols_loc }}) %>%
     dplyr::mutate(
-      date_added = std_dates(.data[["date_added"]]) %>% lubridate::as_date(),
+      date_added = std_dates(.data[["date_added"]], force = "dt") %>%
+        dplyr::na_if(std_dates("1900-01-01")),
       pkey = as.character(.data[["pkey"]]),
       result = std_names(.data[["result"]]),
-      test_date = std_dates(.data[["test_date"]]) %>% lubridate::as_date(),
+      test_date = std_dates(.data[["test_date"]], force = "dt") %>%
+        dplyr::na_if(std_dates("1900-01-01")),
       first_name = std_names(.data[["first_name"]]),
       last_name = std_names(.data[["last_name"]]),
-      date_of_birth = std_dates(.data[["date_of_birth"]]) %>%
-        lubridate::as_date(),
+      date_of_birth = std_dates(.data[["date_of_birth"]], force = "dt")  %>%
+        dplyr::na_if(std_dates("1900-01-01")),
       sex = std_names(.data[["sex"]]),
       pnumber = std_phone(.data[["pnumber"]]),
       addr1 = std_addr(.data[["addr1"]]),
@@ -159,7 +202,7 @@ add_acns_long_term_care <- function(.data) {
 add_acns_duplicate <- function(
   .data,
   date = attr(.data, "date"),
-  max_dist = 180L,
+  max_dist = 90L,
   assign = FALSE
 ) {
 

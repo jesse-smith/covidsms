@@ -8,6 +8,7 @@ prep_acns(
   .data = download_acns(),
   incl_positive = TRUE,
   filter_acns = TRUE,
+  filter_lab = TRUE,
   assign = FALSE,
   date = attr(.data, "date")
 )
@@ -20,6 +21,8 @@ is supplied, the latest data will be downloaded.}
 
 \item{filter_acns}{Should duplicated data from the previous ACNS files be
 filtered out?}
+
+\item{filter_lab}{Should labs in the current ACNS data be filtered from NBS?}
 
 \item{assign}{Is this data being used for assignment purposes (\code{TRUE}) or
 sms notification (\code{FALSE})? The default is \code{FALSE}.}
