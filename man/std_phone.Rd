@@ -4,13 +4,16 @@
 \alias{std_phone}
 \title{Standardize Phone Numbers}
 \usage{
-std_phone(x, dialr = FALSE)
+std_phone(x, dialr = FALSE, quiet = TRUE)
 }
 \arguments{
 \item{x}{A vector convertible to \code{character} format containing phone numbers}
 
 \item{dialr}{Should the \code{dialr} package be used to check for valid number
 ranges? The default is \code{FALSE}.}
+
+\item{quiet}{Should the progress bar from dialr be shown? Ignored if
+\code{dialr = FALSE}.}
 }
 \value{
 A \code{character} vector of standardized phone numbers
