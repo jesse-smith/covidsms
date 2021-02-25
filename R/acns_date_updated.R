@@ -4,7 +4,7 @@
 #'
 #' @param pwd Password for SFTP server
 #'
-#' @param path Server path to the ACNS file
+#' @param regexp Regular expression identifying the ACNS file
 #'
 #' @return A `Date`
 #'

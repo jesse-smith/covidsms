@@ -11,40 +11,39 @@ Description: What the package does (one paragraph).
 License: GPL (>= 3)
 URL: https://github.com/jesse-smith/covidsms
 BugReports: https://github.com/jesse-smith/covidsms/issues
-Depends: 
-    R (>= 2.10)
 Imports: 
-    coviData,
-    covidModel,
-    curl,
+    coviData (>= 0.0.0.9001),
     dplyr,
-    fs,
-    fst,
     janitor,
     lubridate,
+    rlang (>= 0.1.2),
+    stringr,
     magrittr,
+    fs,
+    fst,
     openxlsx,
     postmastr,
     purrr,
-    rlang (>= 0.1.2),
     stringi,
-    stringr,
     tibble,
     tidyr,
     vctrs,
-    vroom
+    vroom,
+    covidModel
 Suggests: 
     covr,
     dialr,
-    memoise,
+    testthat (>= 3.0.0),
     roxygen2,
-    testthat (>= 3.0.0)
+    memoise
 Remotes: 
     jesse-smith/coviData,
-    jesse-smith/covidModel,
-    socialresearchcentre/dialr
+    socialresearchcentre/dialr,
+    jesse-smith/covidModel
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
