@@ -15,7 +15,7 @@ acns_date_updated(
 
 \item{pwd}{Password for SFTP server}
 
-\item{regexp}{Regular expression identifying the ACNS file}
+\item{path}{Server path to the ACNS file}
 }
 \value{
 A \code{Date}

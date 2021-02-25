@@ -8,6 +8,9 @@
 #' @param filter_lab Should records from labs reported through the ACNS process
 #'   be filtered out?
 #'
+#' @param labs Character vector of labs to filter; the default is all labs
+#'   reporting directly to SCHD
+#'
 #' @param filter_new Should only new positives be returned? These are still
 #'   de-duplicated across the full NBS dataset.
 #'
