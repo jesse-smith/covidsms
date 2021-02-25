@@ -17,13 +17,17 @@
 #'   accessing the ACNS SMS data. The username should appear first, then the
 #'   password.
 #'
+#' @param date The date to assign to the `date_tbl`; if `NULL`, this will be
+#'   calculated from the data
+#'
 #' @return A `tibble` containing the joined data
 #'
 #' @export
 download_acns <- function(
   primary = c("sms", "addr"),
   addr_creds = Sys.getenv(c("acns_usr", "acns_pwd")),
-  sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd"))
+  sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd")),
+  date = NULL
 ) {
 
   primary <- rlang::arg_match(primary)[[1L]]
@@ -33,14 +37,22 @@ download_acns <- function(
 
   by_cols <- dplyr::intersect(colnames(addr), colnames(sms))
 
+  date <- lubridate::as_date(date)
+
+  date_updated <- if (vctrs::vec_is_empty(date)) acns_date_updated() else date
+
   purrr::when(
     primary,
     . == "sms"  ~ dplyr::right_join(addr, sms, by = by_cols),
     . == "addr" ~ dplyr::left_join(addr, sms, by = by_cols),
     ~ rlang::abort("`primary` must be 'sms' or 'addr'")
   ) %>%
-    dplyr::relocate(dplyr::matches("^date_added$"), .before = 1L) %>%
-    as_date_tbl(date = acns_date_added(.))
+    dplyr::relocate(
+      dplyr::matches("^pkey$"),
+      dplyr::matches("^date_added$"),
+      .before = 1L
+    ) %>%
+    as_date_tbl(date = date_updated)
 }
 
 #' Download ACNS_DAILY_OUT File from SFTP Server
@@ -93,6 +105,7 @@ download_sms <- function(
 
   # Define column types
   col_types <- vroom::cols(
+    PKEY = vroom::col_character(),
     DATE_ADDED = vroom::col_date(format = "%m/%d/%Y"),
     RESULT = vroom::col_character(),
     TEST_DATE = vroom::col_date(format = "%m/%d/%Y"),
@@ -243,42 +256,6 @@ download_sftp <- function(
   )
 
   invisible(path_create(dir_local, file))
-}
-
-#' Pull Latest `date_added` from ACNS Data
-#'
-#' @param .data ACNS data with a `date_added` column
-#'
-#' @return The latest `date_added` in `Date` format, or `NA_Date_` if not
-#'   available
-acns_date_added <- function(.data) {
-
-  # If no `date_added` column (in lowercase), returns missing date
-  if (!"date_added" %in% colnames(.data)) {
-    return(lubridate::NA_Date_)
-  }
-
-  is_dt_dttm <- any(
-    lubridate::is.Date(.data[["date_added"]]),
-    lubridate::is.POSIXt(.data[["date_added"]])
-  )
-
-  # Get maximum date from `date_added`
-  if (is_dt_dttm) {
-    date <- suppressWarnings(max(.data[["date_added"]], na.rm = TRUE))
-  } else {
-    date <- suppressWarnings(
-      .data[["date_added"]] %>% std_dates() %>% max(na.rm = TRUE)
-    )
-  }
-
-  # Handle all missing `date_added`
-  if (rlang::is_empty(date) || abs(as.integer(date)) %in% c(Inf, NA_integer_)) {
-    date <- lubridate::NA_Date_
-  }
-
-  # Return in `Date` format (even if datetime)
-  lubridate::as_date(date)
 }
 
 #' Convert readr/vroom Column Specification to readxl Format

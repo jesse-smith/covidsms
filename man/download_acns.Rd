@@ -7,7 +7,8 @@
 download_acns(
   primary = c("sms", "addr"),
   addr_creds = Sys.getenv(c("acns_usr", "acns_pwd")),
-  sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd"))
+  sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd")),
+  date = NULL
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ password.}
 \item{sms_creds}{Character. A length 2 vector containing the credentials for
 accessing the ACNS SMS data. The username should appear first, then the
 password.}
+
+\item{date}{The date to assign to the \code{date_tbl}; if \code{NULL}, this will be
+calculated from the data}
 }
 \value{
 A \code{tibble} containing the joined data
