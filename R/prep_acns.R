@@ -82,7 +82,7 @@ acns_labs <- function(.data) {
   .data[["pkey"]] %>%
     stringr::str_extract(lab_pattern) %>%
     vctrs::vec_unique() %>%
-    na.omit() %>%
+    stats::na.omit() %>%
     as.vector(mode = "character") %>%
     stringr::str_replace("BAPT", replacement = "BAPTIST") %>%
     stringr::str_replace("POPH", replacement = "POPLAR")
