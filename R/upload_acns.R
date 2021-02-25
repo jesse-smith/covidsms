@@ -16,7 +16,7 @@
 #' @export
 upload_acns <- function(
   .data,
-  path = "ACNS/ACNS_DAILY_PARSED.csv",
+  path = "ACNS/ACNS_NBS.csv",
   usr = Sys.getenv("sftp_usr"),
   pwd = Sys.getenv("sftp_pwd")
 ) {
@@ -62,7 +62,7 @@ upload_acns <- function(
   # Save `.data` as a temporary csv file
   tmp_dir <- fs::file_temp() %>% fs::dir_create()
   tmp <- path_create(tmp_dir, file_name)
-  vroom::vroom_write(sms_data, delim = ",", path = tmp)
+  vroom::vroom_write(sms_data, path = tmp, delim = ",", na = "")
   on.exit(fs::file_delete(tmp), add = TRUE)
 
   coviData::sftp_upload(

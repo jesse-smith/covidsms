@@ -6,7 +6,7 @@
 \usage{
 upload_acns(
   .data,
-  path = "ACNS/ACNS_DAILY_PARSED.csv",
+  path = "ACNS/ACNS_NBS.csv",
   usr = Sys.getenv("sftp_usr"),
   pwd = Sys.getenv("sftp_pwd")
 )
