@@ -7,19 +7,14 @@ archive_sms <- function(
   # Standardize path to file
   path <- path_create(path)
 
-  # Get latest date added to use as date in filename
-  date <- path %>%
-    coviData::read_file_delim(
-      col_select = "DATE_ADDED",
-      col_types = vroom::cols(DATE_ADDED = vroom::col_date(format = "%m/%d/%Y"))
-    ) %>%
-    dplyr::pull(1L) %>%
-    max(na.rm = TRUE)
+  # Check whether file is empty - this causes an error in vroom() when loading
+  # via load_sms_all()
+  is_empty <- vctrs::vec_is_empty(coviData::read_file_delim(path))
 
   # Create new path for archive
   new_file <- fs::path_file(path) %>%
     fs::path_ext_remove() %>%
-    paste0("_", date)
+    paste0("_", acns_date_updated(), if (is_empty) "_EMPTY")
   new_ext <- fs::path_ext(path)
   new_path <- path_create(dir, new_file, ext = new_ext)
 
