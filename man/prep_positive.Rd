@@ -7,6 +7,7 @@
 prep_positive(
   .data = load_positive(),
   filter_lab = TRUE,
+  labs = c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT"),
   filter_new = FALSE,
   filter_acns = filter_new,
   date = attr(.data, "date")

@@ -1,6 +1,14 @@
-filter_by_lab <- function(.data, filter = TRUE) {
-  if (filter) {
-    labs <- c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT")
+filter_by_lab <- function(
+  .data,
+  filter = TRUE,
+  labs = c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT")
+) {
+  if (filter && !vctrs::vec_is_empty(labs)) {
+
+    coviData::assert(
+      labs %in% c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT"),
+      message = "`labs` must be in 'AEL', 'BAPTIST', 'CCHS', 'POPLAR', 'UT'"
+    )
 
     .data %>%
       dplyr::filter(!.data[[".lab_tmp_"]] %in% labs) %>%

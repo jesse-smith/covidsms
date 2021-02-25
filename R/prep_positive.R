@@ -21,6 +21,7 @@
 prep_positive <- function(
   .data = load_positive(),
   filter_lab = TRUE,
+  labs = c("AEL", "BAPTIST", "CCHS", "POPLAR", "UT"),
   filter_new = FALSE,
   filter_acns = filter_new,
   date = attr(.data, "date")
@@ -32,7 +33,7 @@ prep_positive <- function(
     translate_positive() %>%
     distinct_investigation() %>%
     distinct_test_date() %>%
-    filter_by_lab(filter = filter_lab) %>%
+    filter_by_lab(filter = filter_lab, labs = labs) %>%
     filter_by_new(filter = filter_new, date = date) %>%
     filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date) %>%
     remove_temp() %>%
