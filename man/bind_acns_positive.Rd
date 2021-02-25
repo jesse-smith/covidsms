@@ -4,7 +4,7 @@
 \alias{bind_acns_positive}
 \title{Bind Positive NBS Data to ACNS}
 \usage{
-bind_acns_positive(.acns, assign = FALSE, date = attr(.acns, "date"))
+bind_acns_positive(.acns, assign = FALSE, date = attr(.acns, "date"), ...)
 }
 \arguments{
 \item{.acns}{ACNS data}
@@ -13,6 +13,10 @@ bind_acns_positive(.acns, assign = FALSE, date = attr(.acns, "date"))
 SMS purposes (\code{FALSE})? Default is \code{FALSE}.}
 
 \item{date}{The \code{date} attribute for the \code{date_tbl} output}
+
+\item{...}{Additional arguments to pass to
+\code{\link[covidsms:prep_positive]{prep_positive()}}; at time of creation,
+these include \code{filter_lab} and \code{filter_acns}}
 }
 \description{
 \code{bind_acns_positive()} binds new data from \code{prep_positive()} to the input
