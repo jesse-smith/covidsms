@@ -20,6 +20,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
+      - name: Install Java
+        run: |
+          # Install xml2 -------------------------------------------------------
+          install.packages("xml2", type = "binary")
+          # Get URL to current Windows binary ----------------------------------
+          page   <- xml2::read_html("https://jdk.java.net/15/")
+          anchor <- xml2::xml_find_all(page, "//blockquote//table//td//a")
+          links  <- xml2::xml_attr(a, "href")
+          url    <- links[grepl("(?i)win", links) & !grepl("(?i)sha256", links)]
+          # Download JDK -------------------------------------------------------
+          zip_path <- "~/openjdk.zip"
+          download.file(url, destfile = zip_path, quiet = TRUE, mode = "wb")
+          # Extract and rename JDK directory -----------------------------------
+          upzip(zip_path)
+          file.rename(list.files("~", pattern = "(?i)^jdk"), "openjdk")
+          # Set JAVA_HOME ------------------------------------------------------
+          j_home        <- gsub("/", "\\\\", path.expand("~/openjdk"))
+          set_java_home <- paste0('setx JAVA_HOME ', '"', j_home, '"')
+          system(set_java_home)
+          # Add JAVA_HOME/bin to path ------------------------------------------
+          sys_path <- Sys.getenv("Path")
+          p_end    <- if (!grepl(";$", sys_path)) "" else ";"
+          new_path <- paste0(sys_path, p_end, j_home, "\\bin;")
+          set_path <- paste0('setx Path ', '"', new_path, '"')
+          system(set_path)
+        shell: Rscript {0}
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"), type = "binary")
