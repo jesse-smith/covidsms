@@ -33,8 +33,9 @@ jobs:
           zip_path <- "~/openjdk.zip"
           download.file(url, destfile = zip_path, quiet = TRUE, mode = "wb")
           # Extract and rename JDK directory -----------------------------------
-          unzip(zip_path)
-          file.rename(list.files("~", pattern = "(?i)^jdk"), "openjdk")
+          unzip(zip_path, exdir = "~")
+          jdk_dir <- list.files("~", pattern = "(?i)^jdk")
+          file.rename(jdk_dir, "openjdk")
           # Set JAVA_HOME ------------------------------------------------------
           j_home        <- gsub("/", "\\\\", path.expand("~/openjdk"))
           set_java_home <- paste0('setx JAVA_HOME ', '"', j_home, '"')
