@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Standardize Phone Numbers — std_phone • covidsms</title>
+<title>Test that the dialr Package Works — test_dialr • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,11 @@
 
 
 
-<meta property="og:title" content="Standardize Phone Numbers — std_phone" />
-<meta property="og:description" content="std_phone() standardizes North American phone numbers to a 10-digit
-national format. Invalid or non-North American numbers are converted to NA.
-Note that std_phone() only check for truly valid number ranges when
-dialr = TRUE; otherwise, all 10-digit numbers are considered valid." />
+<meta property="og:title" content="Test that the dialr Package Works — test_dialr" />
+<meta property="og:description" content="dialr depends on the libphonenumber Java library and requires a working
+Java Development Kit installation with environment variables set
+appropriately. This function checks that dialr works and attempts to provide
+informative messages about why it may not." />
 
 
 
@@ -111,42 +111,33 @@ dialr = TRUE; otherwise, all 10-digit numbers are considered valid." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Standardize Phone Numbers</h1>
+    <h1>Test that the dialr Package Works</h1>
     <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/std_phone.R'><code>R/std_phone.R</code></a></small>
-    <div class="hidden name"><code>std_phone.Rd</code></div>
+    <div class="hidden name"><code>test_dialr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>std_phone()</code> standardizes North American phone numbers to a 10-digit
-national format. Invalid or non-North American numbers are converted to <code>NA</code>.
-Note that <code>std_phone()</code> only check for truly valid number ranges when
-<code>dialr = TRUE</code>; otherwise, all 10-digit numbers are considered valid.</p>
+    <p>dialr depends on the libphonenumber Java library and requires a working
+Java Development Kit installation with environment variables set
+appropriately. This function checks that dialr works and attempts to provide
+informative messages about why it may not.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>std_phone</span><span class='op'>(</span><span class='va'>x</span>, dialr <span class='op'>=</span> <span class='fu'><a href='test_dialr.html'>test_dialr</a></span><span class='op'>(</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>test_dialr</span><span class='op'>(</span>quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A vector convertible to <code>character</code> format containing phone numbers</p></td>
-    </tr>
-    <tr>
-      <th>dialr</th>
-      <td><p>Should the <code>dialr</code> package be used to check for valid number
-ranges? The default uses dialr if it is installed and working.</p></td>
-    </tr>
-    <tr>
       <th>quiet</th>
-      <td><p>Should the progress bar from dialr be shown? Ignored if
-<code>dialr = FALSE</code>.</p></td>
+      <td><p>Should warnings be shown if dialr does not work? These will only
+be shown once per session.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>character</code> vector of standardized phone numbers</p>
+    <p>A boolean indicating whether dialr is functioning properly</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
