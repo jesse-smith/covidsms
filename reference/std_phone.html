@@ -41,7 +41,9 @@
 
 <meta property="og:title" content="Standardize Phone Numbers — std_phone" />
 <meta property="og:description" content="std_phone() standardizes North American phone numbers to a 10-digit
-national format. Invalid or non-North American numbers are converted to NA." />
+national format. Invalid or non-North American numbers are converted to NA.
+Note that std_phone() only check for truly valid number ranges when
+dialr = TRUE; otherwise, all 10-digit numbers are considered valid." />
 
 
 
@@ -116,10 +118,12 @@ national format. Invalid or non-North American numbers are converted to NA." />
 
     <div class="ref-description">
     <p><code>std_phone()</code> standardizes North American phone numbers to a 10-digit
-national format. Invalid or non-North American numbers are converted to <code>NA</code>.</p>
+national format. Invalid or non-North American numbers are converted to <code>NA</code>.
+Note that <code>std_phone()</code> only check for truly valid number ranges when
+<code>dialr = TRUE</code>; otherwise, all 10-digit numbers are considered valid.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>std_phone</span><span class='op'>(</span><span class='va'>x</span>, region <span class='op'>=</span> <span class='st'>"US"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>std_phone</span><span class='op'>(</span><span class='va'>x</span>, dialr <span class='op'>=</span> <span class='cn'>FALSE</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -127,6 +131,16 @@ national format. Invalid or non-North American numbers are converted to <code>NA
     <tr>
       <th>x</th>
       <td><p>A vector convertible to <code>character</code> format containing phone numbers</p></td>
+    </tr>
+    <tr>
+      <th>dialr</th>
+      <td><p>Should the <code>dialr</code> package be used to check for valid number
+ranges? The default is <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>quiet</th>
+      <td><p>Should the progress bar from dialr be shown? Ignored if
+<code>dialr = FALSE</code>.</p></td>
     </tr>
     </table>
 

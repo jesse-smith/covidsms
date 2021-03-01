@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Re-Define std_names() to Remove Trailing Initials — std_names • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Re-Define std_names() to Remove Trailing Initials — std_names" />
+<meta property="og:description" content="std_names() uses coviData::std_names() to parse string, then removes
+trailing single letters preceded by whitespace." />
 
 
 
@@ -109,42 +109,30 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Re-Define <code>std_names()</code> to Remove Trailing Initials</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/std_names.R'><code>R/std_names.R</code></a></small>
+    <div class="hidden name"><code>std_names.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p><code>std_names()</code> uses <code><a href='https://rdrr.io/pkg/coviData/man/std_names.html'>coviData::std_names()</a></code> to parse <code>string</code>, then removes
+trailing single letters preceded by whitespace.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>std_names</span><span class='op'>(</span><span class='va'>string</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
-    </tr>
-    <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>string</th>
+      <td><p>A character vector</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>A standardized character vector</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

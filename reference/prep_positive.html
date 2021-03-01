@@ -121,8 +121,11 @@ format needed for exports to the ACNS process.</p>
 
     <pre class="usage"><span class='fu'>prep_positive</span><span class='op'>(</span>
   .data <span class='op'>=</span> <span class='fu'><a href='load_positive.html'>load_positive</a></span><span class='op'>(</span><span class='op'>)</span>,
-  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>.data</span>, <span class='st'>"date"</span><span class='op'>)</span>,
-  phone <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cell"</span>, <span class='st'>"home"</span>, <span class='st'>"work"</span><span class='op'>)</span>
+  filter_lab <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  labs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AEL"</span>, <span class='st'>"BAPTIST"</span>, <span class='st'>"CCHS"</span>, <span class='st'>"POPLAR"</span>, <span class='st'>"UT"</span><span class='op'>)</span>,
+  filter_new <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  filter_acns <span class='op'>=</span> <span class='va'>filter_new</span>,
+  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>.data</span>, <span class='st'>"date"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -133,8 +136,27 @@ format needed for exports to the ACNS process.</p>
       <td><p>Data from NBS snapshot file</p></td>
     </tr>
     <tr>
+      <th>filter_lab</th>
+      <td><p>Should records from labs reported through the ACNS process
+be filtered out?</p></td>
+    </tr>
+    <tr>
+      <th>labs</th>
+      <td><p>Character vector of labs to filter; the default is all labs
+reporting directly to SCHD</p></td>
+    </tr>
+    <tr>
+      <th>filter_new</th>
+      <td><p>Should only new positives be returned? These are still
+de-duplicated across the full NBS dataset.</p></td>
+    </tr>
+    <tr>
+      <th>filter_acns</th>
+      <td><p>Should duplicates from previous ACNS files be removed?</p></td>
+    </tr>
+    <tr>
       <th>date</th>
-      <td><p>The date to use when creating the <code>DATE_ADDED</code> variable</p></td>
+      <td><p>The <code>date</code> attribute for the resulting <code>date_tbl</code></p></td>
     </tr>
     </table>
 

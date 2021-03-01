@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Translate ACNS Data into Format Upload-able to the ACNS System — translate_acns_upload • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Translate ACNS Data into Format Upload-able to the ACNS System — translate_acns_upload" />
+<meta property="og:description" content="Translate ACNS Data into Format Upload-able to the ACNS System" />
 
 
 
@@ -109,42 +108,29 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Translate ACNS Data into Format Upload-able to the ACNS System</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/translate_acns_upload.R'><code>R/translate_acns_upload.R</code></a></small>
+    <div class="hidden name"><code>translate_acns_upload.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p>Translate ACNS Data into Format Upload-able to the ACNS System</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>translate_acns_upload</span><span class='op'>(</span><span class='va'>.acns</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
-    </tr>
-    <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>.acns</th>
+      <td><p>Prepared ACNS data</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>ACNS data translated into the format needed by the ACNS system</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

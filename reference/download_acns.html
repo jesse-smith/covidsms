@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Download Current ACNS Data — download_acns • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,12 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Download Current ACNS Data — download_acns" />
+<meta property="og:description" content="download_acns() downloads data from both the address and texting ACNS
+files and merges the two using common columns. It uses the address data as
+reference; any data in the SMS dataset not matching the address data is
+dropped. This is because address data is necessary for some downstream
+functions." />
 
 
 
@@ -109,42 +112,56 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Download Current ACNS Data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/download_acns.R'><code>R/download_acns.R</code></a></small>
+    <div class="hidden name"><code>download_acns.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p><code>download_acns()</code> downloads data from both the address and texting ACNS
+files and merges the two using common columns. It uses the address data as
+reference; any data in the SMS dataset not matching the address data is
+dropped. This is because address data is necessary for some downstream
+functions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>download_acns</span><span class='op'>(</span>
+  primary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sms"</span>, <span class='st'>"addr"</span><span class='op'>)</span>,
+  addr_creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"acns_usr"</span>, <span class='st'>"acns_pwd"</span><span class='op'>)</span><span class='op'>)</span>,
+  sms_creds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"sftp_usr"</span>, <span class='st'>"sftp_pwd"</span><span class='op'>)</span><span class='op'>)</span>,
+  date <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
+      <th>primary</th>
+      <td><p>Which data source should be used as the primary table? Choices
+are <code>"sms"</code> or <code>"addr"</code>; defaults to <code>"sms"</code>.</p></td>
     </tr>
     <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>addr_creds</th>
+      <td><p>Character. A length 2 vector containing the credentials for
+accessing the ACNS address data. The username should appear first, then the
+password.</p></td>
+    </tr>
+    <tr>
+      <th>sms_creds</th>
+      <td><p>Character. A length 2 vector containing the credentials for
+accessing the ACNS SMS data. The username should appear first, then the
+password.</p></td>
+    </tr>
+    <tr>
+      <th>date</th>
+      <td><p>The date to assign to the <code>date_tbl</code>; if <code>NULL</code>, this will be
+calculated from the data</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>A <code>tibble</code> containing the joined data</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

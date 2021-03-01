@@ -4,13 +4,43 @@
     <loc>https://jesse-smith.github.io/covidsms//index.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/acns_date_updated.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/archive_acns_upload.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/archive_positive.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/as_chr_ascii.html</loc>
   </url>
   <url>
-    <loc>https://jesse-smith.github.io/covidsms//reference/as_single_digit_date.html</loc>
+    <loc>https://jesse-smith.github.io/covidsms//reference/bind_acns_positive.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/check_new_sms.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/class-date_tbl.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/data-paths.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/distinct_investigation.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/download_acns.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/download_addr.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/download_sftp.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/download_sms.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/filter_by_death.html</loc>
@@ -34,13 +64,43 @@
     <loc>https://jesse-smith.github.io/covidsms//reference/magrittr-helpers.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/mem_if_not.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/no_fmt.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/parse_ltcf_addr1.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/path_sms.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/pkey_nbs.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/prep_acns.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/prep_positive-memoised.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/prep_positive.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/read-memoised.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/read_file.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/remove_temp.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/states.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/std_addr.html</loc>
@@ -49,12 +109,36 @@
     <loc>https://jesse-smith.github.io/covidsms//reference/std_ltcf_addr1.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/std_names.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/std_phone.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/tidyeval-data.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/tidyeval-walrus.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/translate_acns_upload.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/translate_positive.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/upload_acns.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/upload_positive.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/utils-coviData.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/validate_sms_data.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/vroom_to_readxl.html</loc>
   </url>
 </urlset>

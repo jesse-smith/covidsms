@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Path to SMS File — path_sms • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Path to SMS File — path_sms" />
+<meta property="og:description" content="Path to SMS File" />
 
 
 
@@ -109,42 +108,42 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Path to SMS File</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/path_sms.R'><code>R/path_sms.R</code></a></small>
+    <div class="hidden name"><code>path_sms.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p>Path to SMS File</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>path_sms</span><span class='op'>(</span>
+  date <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dir <span class='op'>=</span> <span class='st'>"V:/EPI DATA ANALYTICS TEAM/Mass Texting/ACNS_DAILY_OUT/"</span>,
+  combined <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
+      <th>date</th>
+      <td><p>A <code>Date</code> or string in the format "YYYY-MM-DD"</p></td>
     </tr>
     <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>dir</th>
+      <td><p>The directory holding the files of interest</p></td>
+    </tr>
+    <tr>
+      <th>combined</th>
+      <td><p>Should the combined ACNS/NBS file be returned? If <code>TRUE</code>,
+appends <code>"Combined"</code> to the end of the directory path.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>An <code>fs_path</code> character vector</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

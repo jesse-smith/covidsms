@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Remove Temporary Variables from a Dataset — remove_temp • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Remove Temporary Variables from a Dataset — remove_temp" />
+<meta property="og:description" content="This packages uses the convention of naming temporary variables with
+the pattern .{semantic_name}_tmp_. This function removes all variables with
+such a name." />
 
 
 
@@ -109,42 +110,31 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Remove Temporary Variables from a Dataset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/remove_temp.R'><code>R/remove_temp.R</code></a></small>
+    <div class="hidden name"><code>remove_temp.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p>This packages uses the convention of naming temporary variables with
+the pattern <code>.{semantic_name}_tmp_</code>. This function removes all variables with
+such a name.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>remove_temp</span><span class='op'>(</span><span class='va'>.data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
-    </tr>
-    <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>.data</th>
+      <td><p>A data frame or data frame extension</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>The data frame with temporary variables removed</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

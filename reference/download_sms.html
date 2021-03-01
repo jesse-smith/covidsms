@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that an Object is ACSCII Character Encoded — is_chr_ascii • covidsms</title>
+<title>Download ACNS_DAILY_OUT File from SFTP Server — download_sms • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Test that an Object is ACSCII Character Encoded — is_chr_ascii" />
-<meta property="og:description" content="is_chr_ascii() tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character." />
+<meta property="og:title" content="Download ACNS_DAILY_OUT File from SFTP Server — download_sms" />
+<meta property="og:description" content="download_sms() downloads the file used to send text messages. Date columns
+are returned as dates; all other are character. All column names are passed
+through janitor::clean_names()." />
 
 
 
@@ -109,42 +110,64 @@ ASCII-encoded character." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that an Object is ACSCII Character Encoded</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/is_chr_ascii.R'><code>R/is_chr_ascii.R</code></a></small>
-    <div class="hidden name"><code>is_chr_ascii.Rd</code></div>
+    <h1>Download ACNS_DAILY_OUT File from SFTP Server</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/download_acns.R'><code>R/download_acns.R</code></a></small>
+    <div class="hidden name"><code>download_sms.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>is_chr_ascii()</code> tests whether an atomic vector or data frame is entirely an
-ASCII-encoded character.</p>
+    <p><code>download_sms()</code> downloads the file used to send text messages. Date columns
+are returned as dates; all other are character. All column names are passed
+through <code><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>janitor::clean_names()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>is_chr_ascii</span><span class='op'>(</span><span class='va'>x</span>, na_rm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>download_sms</span><span class='op'>(</span>
+  path <span class='op'>=</span> <span class='st'>"ACNS/ACNS_DAILY_OUT.txt"</span>,
+  usr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='st'>"sftp_usr"</span><span class='op'>)</span>,
+  pwd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Sys.getenv.html'>Sys.getenv</a></span><span class='op'>(</span><span class='st'>"sftp_pwd"</span><span class='op'>)</span>,
+  server <span class='op'>=</span> <span class='st'>"xfer.shelbycountytn.gov"</span>,
+  archive <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  archive_dir <span class='op'>=</span> <span class='st'>"V:/EPI DATA ANALYTICS TEAM/Mass Texting/ACNS_DAILY_OUT/"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object to test</p></td>
+      <th>path</th>
+      <td><p>Path to file to download on SFTP server</p></td>
     </tr>
     <tr>
-      <th>na_rm</th>
-      <td><p>Should missing values be removed for testing? If <code>FALSE</code>, any
-missing values will return <code>NA</code></p></td>
+      <th>usr</th>
+      <td><p>Username for SFTP server</p></td>
+    </tr>
+    <tr>
+      <th>pwd</th>
+      <td><p>Password for SFTP server</p></td>
+    </tr>
+    <tr>
+      <th>server</th>
+      <td><p>Server address</p></td>
+    </tr>
+    <tr>
+      <th>archive</th>
+      <td><p>Should the data be archived before loading in-memory? This
+will only write data to an archive file that does not already exist.</p></td>
+    </tr>
+    <tr>
+      <th>archive_dir</th>
+      <td><p>The archive directory path</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments to pass to <code><a href='read_file.html'>read_file()</a></code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>TRUE</code> if the object is ASCII character, <code>NA</code> if it includes missing
-values and <code>na_rm = FALSE</code>, otherwise <code>FALSE</code></p>
+    <p>A <code>tibble</code> containing the data from the ACNS sms file</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
