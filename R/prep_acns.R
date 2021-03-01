@@ -320,6 +320,6 @@ acns_long_term_care <- function(pnumber, addr1, zip) {
 std_acns_phone <- function(.data) {
   dplyr::mutate(
     .data,
-    pnumber = suppressMessages(std_phone(.data[["pnumber"]], dialr = TRUE))
+    pnumber = std_phone(.data[["pnumber"]])
   )
 }

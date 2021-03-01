@@ -8,7 +8,7 @@
 #' @param x A vector convertible to `character` format containing phone numbers
 #'
 #' @param dialr Should the `dialr` package be used to check for valid number
-#'   ranges? The default is `FALSE`.
+#'   ranges? The default uses dialr if it is installed.
 #'
 #' @param quiet Should the progress bar from dialr be shown? Ignored if
 #'   `dialr = FALSE`.
@@ -16,7 +16,7 @@
 #' @return A `character` vector of standardized phone numbers
 #'
 #' @export
-std_phone <- function(x, dialr = FALSE, quiet = TRUE) {
+std_phone <- function(x, dialr = rlang::is_installed("dialr"), quiet = TRUE) {
 
   extraction_pattern <- "^([+]?0?1)?[0-9]{10}"
   removal_pattern <- "^([+]?0?1)(?=[0-9]{10})"
