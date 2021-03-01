@@ -27,7 +27,7 @@ jobs:
           # Get URL to current Windows binary ----------------------------------
           page   <- xml2::read_html("https://jdk.java.net/15/")
           anchor <- xml2::xml_find_all(page, "//blockquote//table//td//a")
-          links  <- xml2::xml_attr(a, "href")
+          links  <- xml2::xml_attr(anchor, "href")
           url    <- links[grepl("(?i)win", links) & !grepl("(?i)sha256", links)]
           # Download JDK -------------------------------------------------------
           zip_path <- "~/openjdk.zip"
