@@ -35,10 +35,12 @@ Imports:
     vroom
 Suggests: 
     covr,
+    remotes,
     dialr,
     memoise,
     roxygen2,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    xml2
 Remotes: 
     jesse-smith/coviData,
     jesse-smith/covidModel,
