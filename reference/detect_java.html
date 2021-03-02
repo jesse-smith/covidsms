@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that the dialr Package Works — test_dialr • covidsms</title>
+<title>Detect Java Install Using Environment Variables — detect_java • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,10 @@
 
 
 
-<meta property="og:title" content="Test that the dialr Package Works — test_dialr" />
-<meta property="og:description" content="dialr depends on the libphonenumber Java library and requires a working
-Java Development Kit installation with environment variables set
-appropriately. This function checks that dialr works and attempts to provide
-informative messages about why it may not." />
+<meta property="og:title" content="Detect Java Install Using Environment Variables — detect_java" />
+<meta property="og:description" content="detect_java() attempts to check that the JAVA_HOME variable is set and that
+the PATH includes a JDK bin. If either of these things is not true, it
+returns FALSE." />
 
 
 
@@ -111,33 +110,36 @@ informative messages about why it may not." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that the dialr Package Works</h1>
+    <h1>Detect Java Install Using Environment Variables</h1>
     <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/dialr.R'><code>R/dialr.R</code></a></small>
-    <div class="hidden name"><code>test_dialr.Rd</code></div>
+    <div class="hidden name"><code>detect_java.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>dialr depends on the libphonenumber Java library and requires a working
-Java Development Kit installation with environment variables set
-appropriately. This function checks that dialr works and attempts to provide
-informative messages about why it may not.</p>
+    <p><code>detect_java()</code> attempts to check that the JAVA_HOME variable is set and that
+the PATH includes a JDK bin. If either of these things is not true, it
+returns <code>FALSE</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>test_dialr</span><span class='op'>(</span>quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>detect_java</span><span class='op'>(</span>dialr <span class='op'>=</span> <span class='cn'>FALSE</span>, quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>dialr</th>
+      <td><p>Should warning messages be formatted for
+<code><a href='test_dialr.html'>test_dialr()</a></code>?</p></td>
+    </tr>
+    <tr>
       <th>quiet</th>
-      <td><p>Should warnings be shown if dialr does not work? These will only
-be shown once per session.</p></td>
+      <td><p>Should warning messages be displayed at all?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A boolean indicating whether dialr is functioning properly</p>
+    <p>A boolean indicating whether Java is available</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -28,6 +28,9 @@
     <loc>https://jesse-smith.github.io/covidsms//reference/data-paths.html</loc>
   </url>
   <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/detect_java.html</loc>
+  </url>
+  <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/distinct_investigation.html</loc>
   </url>
   <url>
@@ -47,6 +50,12 @@
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/filter_by_residence.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/install_dialr.html</loc>
+  </url>
+  <url>
+    <loc>https://jesse-smith.github.io/covidsms//reference/install_java.html</loc>
   </url>
   <url>
     <loc>https://jesse-smith.github.io/covidsms//reference/is_chr_ascii.html</loc>

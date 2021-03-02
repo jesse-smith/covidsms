@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test that the dialr Package Works — test_dialr • covidsms</title>
+<title>Install OpenJDK for Windows — install_java • covidsms</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,10 @@
 
 
 
-<meta property="og:title" content="Test that the dialr Package Works — test_dialr" />
-<meta property="og:description" content="dialr depends on the libphonenumber Java library and requires a working
-Java Development Kit installation with environment variables set
-appropriately. This function checks that dialr works and attempts to provide
-informative messages about why it may not." />
+<meta property="og:title" content="Install OpenJDK for Windows — install_java" />
+<meta property="og:description" content="install_java() downloads and makes available the current release version
+of OpenJDK, which is required for the dialr package. It sets the JAVA_HOME
+variable and adds the JDK &quot;bin&quot; folder to the user PATH." />
 
 
 
@@ -111,33 +110,36 @@ informative messages about why it may not." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test that the dialr Package Works</h1>
+    <h1>Install OpenJDK for Windows</h1>
     <small class="dont-index">Source: <a href='https://github.com/jesse-smith/covidsms/blob/master/R/dialr.R'><code>R/dialr.R</code></a></small>
-    <div class="hidden name"><code>test_dialr.Rd</code></div>
+    <div class="hidden name"><code>install_java.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>dialr depends on the libphonenumber Java library and requires a working
-Java Development Kit installation with environment variables set
-appropriately. This function checks that dialr works and attempts to provide
-informative messages about why it may not.</p>
+    <p><code>install_java()</code> downloads and makes available the current release version
+of OpenJDK, which is required for the dialr package. It sets the <code>JAVA_HOME</code>
+variable and adds the JDK "bin" folder to the user <code>PATH</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>test_dialr</span><span class='op'>(</span>quiet <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>install_java</span><span class='op'>(</span>dir <span class='op'>=</span> <span class='st'>"~"</span>, check_java <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>quiet</th>
-      <td><p>Should warnings be shown if dialr does not work? These will only
-be shown once per session.</p></td>
+      <th>dir</th>
+      <td><p>Directory to save the JDK folder</p></td>
+    </tr>
+    <tr>
+      <th>check_java</th>
+      <td><p>Should the function attempt to detect Java prior to
+installation?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A boolean indicating whether dialr is functioning properly</p>
+    <p>The path to the OpenJDK directory (invisibly)</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
