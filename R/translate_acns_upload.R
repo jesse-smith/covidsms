@@ -11,6 +11,6 @@ translate_acns_upload <- function(.acns) {
     dplyr::mutate(
       dplyr::across(where(lubridate::is.Date), ~ format(.x, "%m/%d/%Y"))
     ) %>%
-    dplyr::select(-where(is.logical)) %>%
+    dplyr::select(-where(is.logical), -"nbs") %>%
     janitor::clean_names(case = "screaming_snake")
 }
