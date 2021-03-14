@@ -19,6 +19,7 @@ translate_positive <- function(.data) {
   p <- list(
     date_added = "report_date",
     pkey = "lab_local_id",
+    nbs = "inv_local_id",
     test_date = "spec_date_only",
     first_name = "patient_first_name",
     last_name = "patient_last_name",
@@ -30,7 +31,6 @@ translate_positive <- function(.data) {
     city = "patient_city",
     state = "patient_state",
     zip = "patient_zip",
-    id = "inv_local_id",
     lab = "perform_facility_name"
   )
 
@@ -40,6 +40,7 @@ translate_positive <- function(.data) {
     dplyr::transmute(
       date_added = std_dates(.data[[p$date_added]]) %>% lubridate::as_date(),
       pkey = pkey_nbs(.data[[p$pkey]]),
+      nbs = .data[[p$nbs]],
       result = "POSITIVE",
       test_date = std_dates(.data[[p$test_date]]) %>% lubridate::as_date(),
       first_name = std_names(.data[[p$first_name]]),
@@ -54,7 +55,6 @@ translate_positive <- function(.data) {
       city = std_city(.data[[p$city]]),
       state = std_state(.data[[p$state]]),
       zip = std_zip(.data[[p$zip]]),
-      .inv_id_tmp_ = .data[[p$id]],
       .lab_tmp_ = .data[[p$lab]] %>%
         std_lab_names() %>%
         std_labs_ael() %>%

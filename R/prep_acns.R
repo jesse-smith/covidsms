@@ -134,14 +134,15 @@ distinct_acns <- function(.data) {
 
 std_acns <- function(.data) {
 
-  addr_cols <- c("pkey", "addr1", "addr2", "city", "state", "zip")
-  cols_to_add <- addr_cols[!addr_cols %in% tolower(colnames(.data))]
+  other_cols <- c("pkey", "nbs", "addr1", "addr2", "city", "state", "zip")
+  cols_to_add <- other_cols[!other_cols %in% tolower(colnames(.data))]
 
   na_col_chr <- rep(NA_character_, times = NROW(.data))
 
   cols_loc <- c(
-    "date_added", "pkey", "result", "test_date", "first_name", "last_name",
-    "date_of_birth", "sex", "pnumber", "addr1", "addr2", "city", "state", "zip"
+    "date_added", "pkey", "nbs", "result", "test_date",
+    "first_name", "last_name", "date_of_birth", "sex", "pnumber",
+    "addr1", "addr2", "city", "state", "zip"
   )
 
   .data %>%
@@ -157,6 +158,7 @@ std_acns <- function(.data) {
       date_added = std_dates(.data[["date_added"]], force = "dt") %>%
         dplyr::na_if(std_dates("1900-01-01")),
       pkey = as.character(.data[["pkey"]]),
+      nbs = as.character(.data[["nbs"]]),
       result = std_names(.data[["result"]]),
       test_date = std_dates(.data[["test_date"]], force = "dt") %>%
         dplyr::na_if(std_dates("1900-01-01")),
