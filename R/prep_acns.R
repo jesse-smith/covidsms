@@ -120,16 +120,12 @@ bind_acns_positive <- function(
 }
 
 distinct_acns <- function(.data) {
-  .data %>%
-    dplyr::mutate(
-      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber",  "zip"))
-    ) %>%
-    coviData::coalesce_dupes(
-      .data[["first_name"]],
-      .data[["last_name"]],
-      .data[["date_of_birth"]],
-      .data[[".phone_zip_tmp_"]]
-    )
+  coviData::coalesce_dupes(
+    .data,
+    .data[["first_name"]],
+    .data[["last_name"]],
+    .data[["date_of_birth"]]
+  )
 }
 
 std_acns <- function(.data) {
@@ -216,22 +212,15 @@ add_acns_duplicate <- function(
     dplyr::anti_join(
       dplyr::filter(.data, is_nbs(.data[["pkey"]])),
       by = c("first_name", "last_name", "date_of_birth", "test_date")
-    ) %>%
-    # Combine phone and ZIP code for matching
-    dplyr::mutate(
-      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber", "zip"))
     )
 
   .data %>%
-    # Combine phone and ZIP code for matching
-    dplyr::mutate(
-      .row_id_tmp_ = dplyr::row_number(),
-      .phone_zip_tmp_ = coviData::coalesce_across(c("pnumber", "zip"))
-    ) %>%
+    # Create row id
+    dplyr::mutate(.row_id_tmp_ = dplyr::row_number()) %>%
     # Get records in data with a match in the reference
     dplyr::left_join(
       all_positive,
-      by = c("first_name", "last_name", "date_of_birth", ".phone_zip_tmp_"),
+      by = c("first_name", "last_name", "date_of_birth"),
       suffix = c("", "_ref_")
     ) %>%
     dplyr::mutate(
