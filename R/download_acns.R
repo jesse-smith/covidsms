@@ -24,29 +24,24 @@
 #'
 #' @export
 download_acns <- function(
-  primary = c("sms", "addr"),
-  addr_creds = Sys.getenv(c("acns_usr", "acns_pwd")),
   sms_creds = Sys.getenv(c("sftp_usr", "sftp_pwd")),
   date = NULL
 ) {
 
-  primary <- rlang::arg_match(primary)[[1L]]
-
-  addr <- download_addr(usr = addr_creds[[1L]], pwd = addr_creds[[2L]])
   sms  <- download_sms(usr = sms_creds[[1]], pwd = sms_creds[[2L]])
-
-  by_cols <- dplyr::intersect(colnames(addr), colnames(sms))
 
   date <- lubridate::as_date(date)
 
   date_updated <- if (vctrs::vec_is_empty(date)) acns_date_updated() else date
 
-  purrr::when(
-    primary,
-    . == "sms"  ~ dplyr::right_join(addr, sms, by = by_cols),
-    . == "addr" ~ dplyr::left_join(addr, sms, by = by_cols),
-    ~ rlang::abort("`primary` must be 'sms' or 'addr'")
-  ) %>%
+sms %>%
+    dplyr::mutate(
+      ADDR1 = NA_character_,
+      ADDR2 = NA_character_,
+      CITY  = NA_character_,
+      STATE = NA_character_,
+      ZIP   = NA_character_
+    ) %>%
     dplyr::relocate(
       dplyr::matches("^pkey$"),
       dplyr::matches("^date_added$"),
@@ -120,62 +115,6 @@ download_sms <- function(
   read_file(path_local, col_types = col_types, ...) %>%
     janitor::clean_names()
 }
-
-#' Download Address File from SFTP Server
-#'
-#' `download_addr()` downloads and loads the address file from the SFTP server.
-#' Date columns are returned as dates; all others are returned as character. All
-#' column names are passed through `janitor::clean_names()`.
-#'
-#' @inheritParams download_sms
-#'
-#' @return A `tibble` containing data from the ACNS address file
-#'
-#' @export
-download_addr <- function(
-  path = "ACNS_ADDRESS_SAMPLE.csv",
-  usr = Sys.getenv("acns_usr"),
-  pwd = Sys.getenv("acns_pwd"),
-  server = "xfer.shelbycountytn.gov",
-  ...
-) {
-
-  # Standardize path
-  path <- path %>% fs::path_norm() %>% fs::path_tidy()
-
-  # Download data to temp directory
-  path_local <- download_sftp(
-    file = fs::path_file(path),
-    dir_remote = fs::path_dir(path),
-    server = server,
-    usr = usr,
-    pwd = pwd
-  )
-  on.exit(try(fs::dir_delete(path_local), silent = TRUE), add = TRUE)
-
-  # Define column types
-  col_types <- vroom::cols(
-    PKEY = vroom::col_character(),
-    RESULT = vroom::col_character(),
-    TEST_DATE = vroom::col_date(format = "%m/%d/%Y"),
-    FIRST_NAME = vroom::col_character(),
-    LAST_NAME = vroom::col_character(),
-    DOB = vroom::col_date(format = "%m/%d/%Y"),
-    SEX = vroom::col_character(),
-    PNUMBER = vroom::col_character(),
-    ADDR1 = vroom::col_character(),
-    ADDR2 = vroom::col_character(),
-    CITY = vroom::col_character(),
-    STATE = vroom::col_character(),
-    ZIP = vroom::col_character()
-  )
-
-  # Load data and assign date
-  read_file(path_local, col_types = col_types, ...) %>%
-    dplyr::rename(DATE_OF_BIRTH = .data[["DOB"]]) %>%
-    janitor::clean_names()
-}
-
 
 #' Read Delimited/Fixed-Width/Excel File
 #'
