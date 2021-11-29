@@ -138,7 +138,7 @@ subsetting operators behave differently." />
     <div class="ref-description">
     <p>These pronouns allow you to be explicit about where to find objects
 when programming with data masked functions.</p><pre><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
-<span class='va'>mtcars</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>.data</span><span class='op'>$</span><span class='va'>disp</span> <span class='op'>*</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>m</span><span class='op'>)</span>
+<span class='va'>mtcars</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>.data</span><span class='op'>$</span><span class='va'>disp</span> <span class='op'>*</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>m</span><span class='op'>)</span>
 </pre>
 <ul>
 <li><p><code>.data</code> retrieves data-variables from the data frame.</p></li>
@@ -147,8 +147,8 @@ when programming with data masked functions.</p><pre><span class='va'>m</span> <
 
 <p>Because the lookup is explicit, there is no ambiguity between both
 kinds of variables. Compare:</p><pre><span class='va'>disp</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
-<span class='va'>mtcars</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>.data</span><span class='op'>$</span><span class='va'>disp</span> <span class='op'>*</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>disp</span><span class='op'>)</span>
-<span class='va'>mtcars</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>disp</span> <span class='op'>*</span> <span class='va'>disp</span><span class='op'>)</span>
+<span class='va'>mtcars</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>.data</span><span class='op'>$</span><span class='va'>disp</span> <span class='op'>*</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>disp</span><span class='op'>)</span>
+<span class='va'>mtcars</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>mutate</span><span class='op'>(</span>disp <span class='op'>=</span> <span class='va'>disp</span> <span class='op'>*</span> <span class='va'>disp</span><span class='op'>)</span>
 </pre>
 
 <p>The <code>.data</code> object exported from rlang is also useful to import in
