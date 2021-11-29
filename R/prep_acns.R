@@ -45,18 +45,23 @@ prep_acns <- function(
       read_file_delim(col_select = "PKEY") %>%
       acns_labs()
   } else {
-    labs = character()
+    labs <- character()
   }
 
-  .data %>%
+  date_pos <- if (assign) date else date - lubridate::days(1L)
+  pos <- load_positive(date_pos)
+
+  acns <- .data %>%
     janitor::clean_names() %>%
     std_acns() %>%
-    filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date) %>%
+    filter_by_acns(filter = filter_acns, excl_last = TRUE, date = date)
+
+  acns %>%
     purrr::when(
       incl_positive ~ bind_acns_positive(
         .,
+        pos,
         date = date,
-        assign = assign,
         filter_acns = filter_acns,
         filter_lab = filter_lab,
         labs = labs
@@ -66,7 +71,7 @@ prep_acns <- function(
     distinct_acns() %>%
     add_acns_school_age() %>%
     add_acns_long_term_care() %>%
-    add_acns_duplicate(date = date, assign = assign) %>%
+    add_acns_duplicate(pos, date = date, assign = assign) %>%
     std_acns_phone() %>%
     remove_temp() %>%
     as_date_tbl(date = date)
@@ -105,15 +110,14 @@ acns_labs <- function(.data) {
 #'   these include `filter_lab` and `filter_acns`
 bind_acns_positive <- function(
   .acns,
+  pos,
   assign = FALSE,
   date = attr(.acns, "date"),
   ...
 ) {
 
-  date_pos <- if (assign) date else date - lubridate::days(1L)
-
   dplyr::bind_rows(
-    load_positive(date_pos) %>% prep_positive(filter_new = TRUE, ...),
+    prep_positive(pos, filter_new = TRUE, ...),
     janitor::clean_names(.acns)
   ) %>%
     as_date_tbl(date = date)
@@ -199,14 +203,13 @@ add_acns_long_term_care <- function(.data) {
 
 add_acns_duplicate <- function(
   .data,
+  pos,
   date = attr(.data, "date"),
   max_dist = 90L,
   assign = FALSE
 ) {
 
-  date_pos <- if (assign) date else date - lubridate::days(1L)
-
-  all_positive <- load_positive(date_pos) %>%
+  all_positive <- pos %>%
     prep_positive(filter_lab = FALSE) %>%
     # Remove new NBS from reference data
     dplyr::anti_join(

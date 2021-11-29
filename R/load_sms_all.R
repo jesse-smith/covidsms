@@ -19,7 +19,10 @@ load_sms_all <- function(
   dir <- path_create(dir)
 
   # Get ACNS files from directory
-  files <- fs::dir_ls(dir, type = "file", regexp = ".*/ACNS_DAILY_OUT.*")
+  file_regex <- paste0(
+    "/ACNS_DAILY_OUT/ACNS_DAILY_OUT_[0-9]{4}-[0-9]{2}-[0-9]{2}[.]txt"
+  )
+  files <- fs::dir_ls(dir, type = "file", regexp = file_regex)
 
   # Get latest date in file names
   date <- files %>%
